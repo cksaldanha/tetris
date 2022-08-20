@@ -1,0 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.cks.tetris.block;
+
+/**
+ *
+ * @author colin.saldanha
+ */
+interface Moveable {
+
+    void moveDown();
+
+    default void moveLeft() {
+        throw new UnsupportedOperationException();
+    }
+
+    default void moveRight() {
+        throw new UnsupportedOperationException();
+    }
+
+    default void moveUp() {
+        throw new UnsupportedOperationException();
+    }
+}
