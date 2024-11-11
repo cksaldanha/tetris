@@ -2,6 +2,8 @@ package com.cks.tetris.board;
 
 import com.cks.tetris.block.Block;
 import com.cks.tetris.block.BlockFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -9,6 +11,7 @@ import com.cks.tetris.block.BlockFactory;
  */
 public class Dropper implements Runnable {
 
+    private static final Logger logger = LogManager.getLogger(Dropper.class);
     private int delay;
 
     public Dropper(int delay) {
@@ -34,7 +37,7 @@ public class Dropper implements Runnable {
                 board.revalidate();
                 Thread.sleep(delay);
             } catch (InterruptedException x) {
-                System.out.println("Interrupted");
+                logger.debug("Dropper was interrupted");
                 Thread.currentThread().interrupt();;
             }
         }

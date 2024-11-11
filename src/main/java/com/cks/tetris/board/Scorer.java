@@ -38,8 +38,6 @@ public class Scorer implements Runnable {
 
         //lines were filled
         if (multiplier > 0) {
-            System.out.println("multiplier = " + multiplier);
-
             long addToScore = (100 * multiplier) * multiplier;
 
             //zero out the rows in Board tile array
@@ -61,7 +59,6 @@ public class Scorer implements Runnable {
                     continue;
                 }
                 for (int x = 0; x < Board.MAX_COLS; x++) {
-                    System.out.print(x + "...");
                     updateTile(x, y, drop);
                     updateTileset(x, y, drop);
                 }
@@ -102,24 +99,19 @@ public class Scorer implements Runnable {
     //update the component
     private void updateTile(int x, int y, int drop) {
         Component c = board.getComponentAt(x * BlockTile.CELL_WIDTH, y * BlockTile.CELL_HEIGHT);
-        System.out.println("In updateTile method");
-        System.out.println(c);
         if (c != null && c instanceof BlockTile) {
             BlockTile t = (BlockTile) c;
             t.setPosY(t.getPosY() + drop);
-            System.out.println("Updated Tile");
         }
     }
 
     //update the array
     private void updateTileset(int x, int y, int drop) {
         Board.reentLock.lock();
-        System.out.println("in 'UpdateTileset' method");
         try {
             int val = board.getTileAt(x, y);
             board.setTileAt(x, y, 0);
             board.setTileAt(x, y + drop, val);
-            System.out.println("Updated Tileset");
         } finally {
             Board.reentLock.unlock();
         }
