@@ -3,12 +3,13 @@ package com.cks.tetris.board;
 import com.cks.tetris.block.Block;
 import com.cks.tetris.block.BlockTile;
 import com.cks.tetris.offset.Offset;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.*;
-import java.util.logging.*;
 import java.util.concurrent.locks.*;
 
 /**
@@ -20,7 +21,7 @@ public final class Board extends JPanel {
     public static final int MAX_COLS = 10;
     public static final int MAX_ROWS = 20;
 
-    private final Logger logger = Logger.getLogger("main");
+    private static final Logger logger = LogManager.getLogger(Board.class);
 
     private Block active;
     private static Board board;
@@ -80,7 +81,6 @@ public final class Board extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (active != null && active.isDropping() && !active.isRotating()) {
-                    System.out.println("Rotate button pressed");
                     active.setRotating(true);
                     active.rotateRight();
                     revalidate();
@@ -171,9 +171,9 @@ public final class Board extends JPanel {
     }
 
     public void setActiveBlock(Block b) {
-        logger.entering("Board", "setActiveBlock");
+        logger.traceEntry("setActiveBlock()", b);
         active = b;
-        logger.exiting("Board", "setActiveBlock");
+        logger.traceExit("setActiveBlock()");
     }
 
     public boolean isActive() {
@@ -202,8 +202,7 @@ public final class Board extends JPanel {
     }
 
     public void addBlock(Block b) {
-        logger.entering("Board", "addBlock");
-        System.out.println(Thread.currentThread().getName() + " in 'addBlock()'");
+        logger.traceEntry("addBlock()", b);
         setActiveBlock(b);
         b.setDropping(true);
 
@@ -223,7 +222,7 @@ public final class Board extends JPanel {
             add(t); //add to panel
         }
         repaint();
-        logger.exiting("Board", "addBlock");
+        logger.traceExit("addBlock()");
     }
 
 }

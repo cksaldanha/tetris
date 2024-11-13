@@ -4,12 +4,12 @@ import com.cks.tetris.board.Board;
 import com.cks.tetris.offset.BlockOffsets;
 import com.cks.tetris.offset.BlockOrientation;
 import com.cks.tetris.offset.Offset;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.Color;
 import java.awt.Point;
 import java.util.List;
-
-import java.util.logging.Logger;
 
 /**
  *
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public abstract class Block implements Moveable, Rotateable {
 
-    private static final Logger logger = Logger.getLogger("main");
+    private static final Logger logger = LogManager.getLogger(Block.class);
 
     protected BlockTile[] tiles;
     protected BlockShape shape;
@@ -54,7 +54,7 @@ public abstract class Block implements Moveable, Rotateable {
     }
 
     private void setTiles(Point loc) {
-        logger.entering("Block", "setTile");
+        logger.traceEntry("setTiles() [Location: {}]", loc);
         List<Offset> offs = BlockOffsets.getOffsetList(shape, currOrient);
 
         for (int i = 0; i < offs.size(); i++) {
@@ -64,14 +64,13 @@ public abstract class Block implements Moveable, Rotateable {
             t.setPosX(loc.x + o.getOffsetX());
             t.setPosY(loc.y + o.getOffsetY());
         }
-        logger.info(loc.toString());
-        logger.exiting("Block", "setTile");
+        logger.traceExit("setTiles()", null);
     }
 
     private boolean checkLocation(Point loc, Board board) {
+        logger.traceEntry("checkLocation() [Location: {}] [Board: {}]", loc, board);
         List<Offset> offs = BlockOffsets.getOffsetList(shape, currOrient);
 
-        System.out.println(Thread.currentThread().getName() + " in 'checkLocation()'");
         for (int i = 0; i < offs.size(); i++) {
             Offset o = offs.get(i);
             //check boundaries
@@ -119,9 +118,7 @@ public abstract class Block implements Moveable, Rotateable {
     }
 
     public void setDropping(boolean b) {
-        logger.entering("Block", "setDropping");
         isDropping = b;
-        logger.exiting("Block", "setDropping", b);
     }
 
     public boolean isRotating() {
@@ -137,7 +134,7 @@ public abstract class Block implements Moveable, Rotateable {
         Board b = Board.getInstance();
         if (!b.isPaused()) {
             Board.reentLock.lock();
-            System.out.println(Thread.currentThread().getName() + " in 'moveDown()'");
+            logger.traceEntry("moveDown()");
 
             try {
                 Point curr = getLocation();
@@ -148,8 +145,7 @@ public abstract class Block implements Moveable, Rotateable {
                     setLocation(curr.x, ++curr.y);
                 } else {
                     isDropping = false;
-                    System.out.println("isDropping is false");
-                    System.out.println(this);
+                    logger.debug("isDropping is false");
                 }
                 b.addTileset(loc, BlockOffsets.getOffsetList(shape, currOrient));
             } finally {

@@ -5,6 +5,8 @@ import com.cks.tetris.board.Dropper;
 import com.cks.tetris.board.Info;
 import com.cks.tetris.board.Scorer;
 import com.cks.tetris.helper.GBC;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,10 +14,6 @@ import javax.swing.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
 
 /**
  *
@@ -23,18 +21,10 @@ import java.util.logging.Level;
  */
 public class App {
 
-    public static final Logger logger = Logger.getLogger("main");
+    public static final Logger logger = LogManager.getLogger(App.class);
     private static JFrame frame;
 
     public static void main(String[] args) {
-
-        //Logging info
-        logger.setLevel(Level.ALL);
-        Handler handler = new ConsoleHandler();
-        handler.setLevel(Level.OFF);
-        logger.addHandler(handler);
-        logger.setUseParentHandlers(false);
-
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception x) {
