@@ -1,7 +1,7 @@
-package com.cks.tetris.block;
+package com.cks.tetris.model.block;
 
-import com.cks.tetris.board.Board;
-import com.cks.tetris.offset.BlockOffsets;
+import com.cks.tetris.model.board.Board;
+import com.cks.tetris.model.offset.BlockOffsets;
 
 import java.util.Map;
 import java.util.HashMap;

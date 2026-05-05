@@ -1,6 +1,6 @@
 package com.cks.tetris.ui;
 
-import com.cks.tetris.helper.GBC;
+import com.cks.tetris.util.GBC;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;

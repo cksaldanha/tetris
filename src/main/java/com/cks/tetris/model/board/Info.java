@@ -1,6 +1,6 @@
-package com.cks.tetris.board;
+package com.cks.tetris.model.board;
 
-import com.cks.tetris.helper.GBC;
+import com.cks.tetris.util.GBC;
 
 import java.awt.*;
 import java.awt.event.*;

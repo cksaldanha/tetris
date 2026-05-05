@@ -1,8 +1,8 @@
-package com.cks.tetris.board;
+package com.cks.tetris.model.board;
 
-import com.cks.tetris.block.Block;
-import com.cks.tetris.block.BlockTile;
-import com.cks.tetris.offset.Offset;
+import com.cks.tetris.model.block.Block;
+import com.cks.tetris.model.block.BlockTile;
+import com.cks.tetris.model.offset.Offset;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,9 +1,9 @@
 package com.cks.tetris.config;
 
-import com.cks.tetris.board.Board;
-import com.cks.tetris.board.Dropper;
-import com.cks.tetris.board.Info;
-import com.cks.tetris.board.Scorer;
+import com.cks.tetris.model.board.Board;
+import com.cks.tetris.model.board.Dropper;
+import com.cks.tetris.model.board.Info;
+import com.cks.tetris.model.board.Scorer;
 import com.cks.tetris.ui.AboutDialog;
 import com.cks.tetris.ui.CommandDialog;
 import org.springframework.beans.factory.annotation.Autowired;

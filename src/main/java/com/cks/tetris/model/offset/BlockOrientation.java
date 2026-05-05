@@ -1,4 +1,4 @@
-package com.cks.tetris.offset;
+package com.cks.tetris.model.offset;
 
 /**
  *

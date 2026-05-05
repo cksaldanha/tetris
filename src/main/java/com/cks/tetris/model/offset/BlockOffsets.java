@@ -1,6 +1,6 @@
-package com.cks.tetris.offset;
+package com.cks.tetris.model.offset;
 
-import com.cks.tetris.block.BlockShape;
+import com.cks.tetris.model.block.BlockShape;
 
 import java.util.Collections;
 import java.util.Map;

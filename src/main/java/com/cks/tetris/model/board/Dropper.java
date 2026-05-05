@@ -1,7 +1,7 @@
-package com.cks.tetris.board;
+package com.cks.tetris.model.board;
 
-import com.cks.tetris.block.Block;
-import com.cks.tetris.block.BlockFactory;
+import com.cks.tetris.model.block.Block;
+import com.cks.tetris.model.block.BlockFactory;
 import lombok.extern.slf4j.Slf4j;
 
 /**
