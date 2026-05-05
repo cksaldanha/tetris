@@ -1,4 +1,4 @@
-package com.cks.tetris.offset;
+package com.cks.tetris.model.offset;
 
 import java.util.Collections;
 import java.util.Map;

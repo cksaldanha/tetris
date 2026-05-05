@@ -1,4 +1,4 @@
-package com.cks.tetris.block;
+package com.cks.tetris.model.block;
 
 /**
  *
