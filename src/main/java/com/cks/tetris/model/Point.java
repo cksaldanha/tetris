@@ -1,5 +1,6 @@
 package com.cks.tetris.model;
 
+import com.cks.tetris.math.IntMatrix;
 import com.cks.tetris.math.RotationMatrix;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -52,6 +53,7 @@ public class Point implements Rotatable {
 
     @Override
     public Point rotate(RotationMatrix rotationMatrix) {
-        return rotationMatrix.rotate(this);
+        IntMatrix product = rotationMatrix.multiplyBy(new IntMatrix(new int[][]{{x}, {y}}));
+        return Point.of(product.get(0, 0), product.get(1, 0));
     }
 }

@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Named.named;
 
 class IntMatrixTest {
@@ -54,6 +55,35 @@ class IntMatrixTest {
         @Test
         void whenCalled() {
             assertThat(matrix.getColumn(2)).isEqualTo(new int[]{3, 6});
+        }
+    }
+
+    @Nested
+    class MultiplyByTest {
+        @Test
+        void whenCalled() {
+            IntMatrix other = new IntMatrix(new int[][]{
+                    {1, 2},
+                    {3, 4},
+                    {5, 6}
+            });
+            IntMatrix expected = new IntMatrix(new int[][]{
+                    {22, 28},
+                    {49, 64}
+            });
+            assertThat(matrix.multiplyBy(other)).isEqualTo(expected);
+        }
+
+        @Test
+        void whenIncompatible() {
+            IntMatrix other = new IntMatrix(new int[][]{
+                    {1, 2},
+                    {3, 4}
+            });
+
+            assertThatThrownBy(() -> matrix.multiplyBy(other))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("Column count of first matrix must be equal to row count of second matrix");
         }
     }
 

@@ -1,13 +1,15 @@
 package com.cks.tetris.model;
 
+import com.cks.tetris.math.IntMatrix;
 import com.cks.tetris.math.RotationMatrix;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 class PointTest {
 
@@ -49,14 +51,14 @@ class PointTest {
         void whenClockWise90() {
             point.rotate(clockWise90Spy);
 
-            verify(clockWise90Spy).rotate(point);
+            verify(clockWise90Spy).multiplyBy(new IntMatrix(new int[][]{{1}, {3}}));
         }
 
         @Test
         void whenCounterClockWise90() {
             point.rotate(counterClockWise90Spy);
 
-            verify(counterClockWise90Spy).rotate(point);
+            verify(counterClockWise90Spy).multiplyBy(new IntMatrix(new int[][]{{1}, {3}}));
         }
     }
 }

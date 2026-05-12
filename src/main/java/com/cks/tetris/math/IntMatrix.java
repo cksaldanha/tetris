@@ -51,6 +51,24 @@ public class IntMatrix {
         return matrix.clone();
     }
 
+    public IntMatrix multiplyBy(IntMatrix other) {
+        if (this.colCount != other.rowCount) {
+            throw new IllegalArgumentException("Column count of first matrix must be equal to row count of second matrix");
+        }
+
+        int[][] result = new int[this.rowCount][other.colCount];
+        for (int r = 0; r < this.rowCount; r++) {
+            for (int c = 0; c < other.colCount; c++) {
+                int sum = 0;
+                for (int i = 0; i < this.colCount; i++) {
+                    sum += this.matrix[r][i] * other.matrix[i][c];
+                }
+                result[r][c] = sum;
+            }
+        }
+        return new IntMatrix(result);
+    }
+
     @Override
     public boolean equals(Object o) {
         return o instanceof IntMatrix other
