@@ -51,6 +51,34 @@ public class IntMatrix {
         return matrix.clone();
     }
 
+    public IntMatrix times(IntMatrix other) {
+        if (this.colCount != other.rowCount) {
+            throw new IllegalArgumentException("Column count of first matrix must be equal to row count of second matrix");
+        }
+
+        int[][] result = new int[this.rowCount][other.colCount];
+        for (int r = 0; r < this.rowCount; r++) {
+            for (int c = 0; c < other.colCount; c++) {
+                int sum = 0;
+                for (int i = 0; i < this.colCount; i++) {
+                    sum += this.matrix[r][i] * other.matrix[i][c];
+                }
+                result[r][c] = sum;
+            }
+        }
+        return new IntMatrix(result);
+    }
+
+    public IntMatrix transpose() {
+        int[][] transposed = new int[colCount][rowCount];
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < colCount; c++) {
+                transposed[c][r] = matrix[r][c];
+            }
+        }
+        return new IntMatrix(transposed);
+    }
+
     @Override
     public boolean equals(Object o) {
         return o instanceof IntMatrix other
@@ -91,6 +119,21 @@ public class IntMatrix {
                 throw new IllegalArgumentException("All rows must have same column size");
             }
         }
+    }
+
+    public static IntMatrix of(int[][] matrix) {
+        return new IntMatrix(matrix);
+    }
+
+    public static IntMatrix of(int[] matrix, int[]... rest) {
+        int[][] combined = new int[1 + rest.length][];
+
+        combined[0] = matrix.clone();
+        for (int i = 0; i < rest.length; i++) {
+            combined[i + 1] = rest[i].clone();
+        }
+
+        return new IntMatrix(combined);
     }
 
 }

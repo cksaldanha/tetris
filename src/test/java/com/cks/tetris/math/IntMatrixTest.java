@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Named.named;
 
 class IntMatrixTest {
@@ -54,6 +55,69 @@ class IntMatrixTest {
         @Test
         void whenCalled() {
             assertThat(matrix.getColumn(2)).isEqualTo(new int[]{3, 6});
+        }
+    }
+
+    @Nested
+    class MultiplyByTest {
+        @Test
+        void whenCalled() {
+            IntMatrix other = new IntMatrix(new int[][]{
+                    {1, 2},
+                    {3, 4},
+                    {5, 6}
+            });
+            IntMatrix expected = new IntMatrix(new int[][]{
+                    {22, 28},
+                    {49, 64}
+            });
+            assertThat(matrix.times(other)).isEqualTo(expected);
+        }
+
+        @Test
+        void whenIncompatible() {
+            IntMatrix other = new IntMatrix(new int[][]{
+                    {1, 2},
+                    {3, 4}
+            });
+
+            assertThatThrownBy(() -> matrix.times(other))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("Column count of first matrix must be equal to row count of second matrix");
+        }
+    }
+
+    @Nested
+    class TransposeTest {
+        @Test
+        void whenCalled() {
+            IntMatrix expected = new IntMatrix(new int[][]{
+                    {1, 4},
+                    {2, 5},
+                    {3, 6}
+            });
+            assertThat(matrix.transpose()).isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class OfTest {
+        @Test
+        void whenSingleRow() {
+            int[] row = {1, 2, 3};
+
+            IntMatrix expected = new IntMatrix(new int[][]{row});
+
+            assertThat(IntMatrix.of(new int[][]{row})).isEqualTo(expected);
+        }
+
+        @Test
+        void whenMultipleRows() {
+            int[] row1 = {1, 2, 3};
+            int[] row2 = {4, 5, 6};
+
+            IntMatrix expected = new IntMatrix(new int[][]{row1, row2});
+            assertThat(IntMatrix.of(new int[][]{row1, row2})).isEqualTo(expected);
         }
     }
 
