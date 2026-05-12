@@ -53,7 +53,11 @@ public class Point implements Rotatable {
 
     @Override
     public Point rotate(RotationMatrix rotationMatrix) {
-        IntMatrix product = rotationMatrix.multiplyBy(new IntMatrix(new int[][]{{x}, {y}}));
+        IntMatrix product = rotationMatrix.times(fromPoint(this).transpose());
         return Point.of(product.get(0, 0), product.get(1, 0));
+    }
+
+    private static IntMatrix fromPoint(Point pt) {
+        return IntMatrix.of(new int[]{pt.x, pt.y});
     }
 }

@@ -51,14 +51,14 @@ class PointTest {
         void whenClockWise90() {
             point.rotate(clockWise90Spy);
 
-            verify(clockWise90Spy).multiplyBy(new IntMatrix(new int[][]{{1}, {3}}));
+            verify(clockWise90Spy).times(new IntMatrix(new int[][]{{1}, {3}}));
         }
 
         @Test
         void whenCounterClockWise90() {
             point.rotate(counterClockWise90Spy);
 
-            verify(counterClockWise90Spy).multiplyBy(new IntMatrix(new int[][]{{1}, {3}}));
+            verify(counterClockWise90Spy).times(new IntMatrix(new int[][]{{1}, {3}}));
         }
     }
 }
