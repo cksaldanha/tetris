@@ -10,7 +10,7 @@ import java.util.Map;
 
 @ToString
 @EqualsAndHashCode
-public class Point implements Rotatable {
+public class Point implements Rotatable, Moveable<Point> {
 
     private static final Map<Integer, Map<Integer, Point>> POINTS_CACHE;
     public static final Point ORIGIN;
@@ -59,5 +59,10 @@ public class Point implements Rotatable {
 
     private static IntMatrix fromPoint(Point pt) {
         return IntMatrix.of(new int[]{pt.x, pt.y});
+    }
+
+    @Override
+    public Point move(Direction direction, int steps) {
+        return steps == 0 ? this : Point.of(x + direction.dx * steps, y + direction.dy * steps);
     }
 }
