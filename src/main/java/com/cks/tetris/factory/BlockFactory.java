@@ -4,6 +4,6 @@ import com.cks.tetris.model.block.Block;
 
 public interface BlockFactory {
 
-    Block getRandomBlock();
+    Block getBlock();
 
 }

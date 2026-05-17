@@ -34,7 +34,7 @@ public class ApplicationBootstrapRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         int rows = gameProperties.getRowCount();
         int cols = gameProperties.getColumnCount();
-        Block startingBlock = blockFactory.getRandomBlock();
+        Block startingBlock = blockFactory.getBlock();
         Board startingBoard = new Board(new Tile[rows][cols], startingBlock, Point.of(cols / 2, 0));
         gameController.updateBoard(startingBoard);
     }
