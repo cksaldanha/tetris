@@ -24,6 +24,8 @@ public class CommandDialog extends JPanel {
         add(createLabel("Move right"));
         add(createLabel("'R'"));
         add(createLabel("Rotate clockwise"));
+        add(createLabel("'F'"));
+        add(createLabel("Rotate counter-clockwise"));
         add(createLabel("'Q'"));
         add(createLabel("Rotate counter-clockwise"));
         add(createLabel("'Space Bar'"));
