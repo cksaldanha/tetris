@@ -2,7 +2,7 @@ package com.cks.tetris.controller;
 
 import com.cks.tetris.factory.BlockFactory;
 import com.cks.tetris.math.RotationMatrix;
-import com.cks.tetris.model.Block;
+import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Direction;
 import com.cks.tetris.model.Point;
@@ -62,17 +62,17 @@ public class GameController {
     }
 
     public void lowerActiveBlock() {
-        log.debug("Lowering active block");
-
         Board board = boardPanel.getBoard();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition().moveDown(1);
+
+        log.debug("Lowering active block {}", block.getClass().getSimpleName());
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
         } else {
             board = boardService.lockActiveBlock(board);
-            board = boardService.setActiveBlock(board, blockFactory.getRandomBlock(), Point.of(board.getColumnCount() / 2, 0));
+            board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
         }
 
         updateBoard(board);

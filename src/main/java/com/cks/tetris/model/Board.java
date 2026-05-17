@@ -1,5 +1,6 @@
 package com.cks.tetris.model;
 
+import com.cks.tetris.model.block.Block;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

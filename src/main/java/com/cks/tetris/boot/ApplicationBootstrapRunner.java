@@ -3,7 +3,7 @@ package com.cks.tetris.boot;
 import com.cks.tetris.config.GameProperties;
 import com.cks.tetris.controller.GameController;
 import com.cks.tetris.factory.BlockFactory;
-import com.cks.tetris.model.Block;
+import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Point;
 import com.cks.tetris.model.Tile;
@@ -34,7 +34,7 @@ public class ApplicationBootstrapRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         int rows = gameProperties.getRowCount();
         int cols = gameProperties.getColumnCount();
-        Block startingBlock = blockFactory.getRandomBlock();
+        Block startingBlock = blockFactory.getBlock();
         Board startingBoard = new Board(new Tile[rows][cols], startingBlock, Point.of(cols / 2, 0));
         gameController.updateBoard(startingBoard);
     }

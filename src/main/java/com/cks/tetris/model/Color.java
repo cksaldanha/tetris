@@ -1,9 +1,11 @@
 package com.cks.tetris.model;
 
 public enum Color {
-    RED,
+    CYAN,
+    YELLOW,
+    PURPLE,
     GREEN,
-    BLUE,
+    RED,
+    NAVY,
     ORANGE,
-    YELLOW
 }
