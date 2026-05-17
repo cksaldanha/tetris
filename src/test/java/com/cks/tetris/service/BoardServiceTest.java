@@ -2,6 +2,8 @@ package com.cks.tetris.service;
 
 import com.cks.tetris.model.*;
 import com.cks.tetris.model.block.Block;
+import com.cks.tetris.model.block.IBlock;
+import com.cks.tetris.model.block.TBlock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,11 +31,7 @@ class BoardServiceTest {
 
     @BeforeEach
     void setUp() {
-        sampleBlock = new Block(Set.of(
-                Point.of(0, 0),
-                Point.of(0, 1),
-                Point.of(0, 2),
-                Point.of(0, 3)), Color.BLUE);
+        sampleBlock = new IBlock();
 
         samplePosition = Point.of(0, 5);
 
@@ -56,11 +54,7 @@ class BoardServiceTest {
         @Test
         @DisplayName("should return a new board with the given block set to the same position")
         void whenDifferentBlock() {
-            Block newBlock = new Block(Set.of(
-                    Point.of(0, 0),
-                    Point.of(1, 0),
-                    Point.of(0, 1),
-                    Point.of(1, 1)), Color.RED);
+            Block newBlock = new TBlock();
 
             Board newboard = service.setActiveBlock(sampleBoard, newBlock, samplePosition);
 
