@@ -8,12 +8,12 @@ import com.cks.tetris.model.Rotatable;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Block implements Rotatable {
+public abstract class Block implements Rotatable {
 
     private final Set<Point> offsets;
     private final Color color;
 
-    public Block(Set<Point> offsets, Color color) {
+    protected Block(Set<Point> offsets, Color color) {
         this.offsets = Set.copyOf(offsets);
         this.color = color;
         validateOffsets(offsets);
@@ -28,8 +28,10 @@ public class Block implements Rotatable {
     }
 
     @Override
-    public Block rotate(RotationMatrix rotationMatrix) {
-        return new Block(offsets.stream().map(pt -> pt.rotate(rotationMatrix)).collect(Collectors.toSet()), color);
+    public abstract Block rotate(RotationMatrix rotationMatrix);
+
+    protected Set<Point> rotateOffsets(RotationMatrix rotationMatrix) {
+        return offsets.stream().map(pt -> pt.rotate(rotationMatrix)).collect(Collectors.toSet());
     }
 
     @Override
