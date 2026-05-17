@@ -1,0 +1,8 @@
+app:
+  tetris:
+    rowCount: 20
+    columnCount: 10
+
+logging:
+  level:
+    com.cks.tetris: DEBUG

@@ -1,5 +1,7 @@
 package com.cks.tetris.ui;
 
+import com.cks.tetris.ui.listener.DirectionKeyListener;
+import com.cks.tetris.ui.listener.RotationKeyListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,13 +18,18 @@ public class MainDialog extends JFrame {
     @Autowired
     public MainDialog(AboutDialog aboutDialog,
                       CommandDialog commandDialog,
-                      BoardPanel boardPanel) {
+                      BoardPanel boardPanel,
+                      DirectionKeyListener directionKeyListener,
+                      RotationKeyListener rotationKeyListener) {
 
         this.aboutDialog = aboutDialog;
         this.commandDialog = commandDialog;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setJMenuBar(mainMenuBar());
+
+        addKeyListener(directionKeyListener);
+        addKeyListener(rotationKeyListener);
 
 //        Info info = new Info();
 //        svc.scheduleWithFixedDelay(new Scorer(board), 0, 250, TimeUnit.MILLISECONDS);
