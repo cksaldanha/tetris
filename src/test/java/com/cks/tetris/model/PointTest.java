@@ -61,4 +61,49 @@ class PointTest {
             verify(counterClockWise90Spy).times(new IntMatrix(new int[][]{{1}, {3}}));
         }
     }
+
+    @Nested
+    class MoveTest {
+        Point original;
+
+        @BeforeEach
+        void setUp() {
+            original = Point.of(10, 10);
+        }
+
+        @Test
+        void whenNoSteps() {
+            Point moved = original.move(Direction.LEFT, 0);
+
+            assertThat(moved).isEqualTo(original);
+        }
+
+        @Test
+        void whenNegativeSteps() {
+            Point moved = original.move(Direction.LEFT, -2);
+
+            assertThat(moved).isEqualTo(Point.of(12, 10));
+        }
+
+        @Test
+        void whenMoveLeft() {
+            Point moved = original.move(Direction.LEFT, 2);
+
+            assertThat(moved).isEqualTo(Point.of(8, 10));
+        }
+
+        @Test
+        void whenMoveRight() {
+            Point moved = original.move(Direction.RIGHT, 2);
+
+            assertThat(moved).isEqualTo(Point.of(12, 10));
+        }
+
+        @Test
+        void whenMoveDown() {
+            Point moved = original.move(Direction.DOWN, 2);
+
+            assertThat(moved).isEqualTo(Point.of(10, 12));
+        }
+    }
 }

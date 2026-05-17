@@ -20,6 +20,10 @@ public class Block implements Rotatable {
         return offsets;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     @Override
     public Block rotate(RotationMatrix rotationMatrix) {
         return new Block(offsets.stream().map(pt -> pt.rotate(rotationMatrix)).collect(Collectors.toSet()), color);

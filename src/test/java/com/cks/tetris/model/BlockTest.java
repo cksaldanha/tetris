@@ -1,5 +1,6 @@
 package com.cks.tetris.model;
 
+import com.cks.tetris.math.RotationMatrix;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -101,6 +102,45 @@ class BlockTest {
                     .isNotEqualTo(b2)
                     .doesNotHaveSameHashCodeAs(b2)
                     .isNotSameAs(b2);
+        }
+    }
+
+    @Nested
+    class RotateTest {
+
+        @Test
+        void whenRotateClockWise90Degrees() {
+            Block original = new Block(Set.of(
+                    Point.of(0, 0),
+                    Point.of(0, 1),
+                    Point.of(0, 2),
+                    Point.of(0, 3)), Color.GREEN);
+
+            Block rotated = original.rotate(RotationMatrix.CLOCK_WISE_90);
+
+            assertThat(rotated.getOffsets())
+                    .containsExactlyInAnyOrder(
+                            Point.of(0, 0),
+                            Point.of(-1, 0),
+                            Point.of(-2, 0),
+                            Point.of(-3, 0));
+        }
+
+        @Test
+        void whenRotateCounterClockWise90Degrees() {
+            Block original = new Block(Set.of(
+                    Point.of(0, 0),
+                    Point.of(0, 1),
+                    Point.of(0, 2),
+                    Point.of(0, 3)), Color.GREEN);
+            Block rotated = original.rotate(RotationMatrix.COUNTER_CLOCK_WISE_90);
+
+            assertThat(rotated.getOffsets())
+                    .containsExactlyInAnyOrder(
+                            Point.of(0, 0),
+                            Point.of(1, 0),
+                            Point.of(2, 0),
+                            Point.of(3, 0));
         }
     }
 

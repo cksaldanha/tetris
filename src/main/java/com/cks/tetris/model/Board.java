@@ -1,8 +1,16 @@
 package com.cks.tetris.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Getter
+@ToString
+@EqualsAndHashCode
 public class Board {
 
     private final int rowCount;
@@ -23,4 +31,31 @@ public class Board {
         return tiles.clone();
     }
 
+    public Tile getTile(int r, int c) {
+        return tiles[r][c];
+    }
+
+    public Tile getTileAtCoordinates(int x, int y) {
+        return tiles[y][x];
+    }
+
+    public boolean containsTileAtCoordinates(int x, int y) {
+        return getTileAtCoordinates(x, y) != null;
+    }
+
+    public Set<Integer> getFullRows() {
+        return IntStream.range(0, rowCount)
+                .filter(this::isFullRow)
+                .boxed()
+                .collect(Collectors.toSet());
+    }
+
+    private boolean isFullRow(int row) {
+        for (int c = 0; c < columnCount; c++) {
+            if (tiles[row][c] == null) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
