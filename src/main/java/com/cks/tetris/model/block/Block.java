@@ -1,6 +1,9 @@
-package com.cks.tetris.model;
+package com.cks.tetris.model.block;
 
 import com.cks.tetris.math.RotationMatrix;
+import com.cks.tetris.model.Color;
+import com.cks.tetris.model.Point;
+import com.cks.tetris.model.Rotatable;
 
 import java.util.Set;
 import java.util.stream.Collectors;

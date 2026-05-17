@@ -3,7 +3,7 @@ package com.cks.tetris.boot;
 import com.cks.tetris.config.GameProperties;
 import com.cks.tetris.controller.GameController;
 import com.cks.tetris.factory.BlockFactory;
-import com.cks.tetris.model.Block;
+import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Point;
 import com.cks.tetris.model.Tile;

@@ -1,7 +1,7 @@
 package com.cks.tetris.service;
 
 import com.cks.tetris.math.RotationMatrix;
-import com.cks.tetris.model.Block;
+import com.cks.tetris.model.block.Block;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.cks.tetris.factory;
 
-import com.cks.tetris.model.Block;
+import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Color;
 import com.cks.tetris.model.Point;
 import lombok.extern.slf4j.Slf4j;

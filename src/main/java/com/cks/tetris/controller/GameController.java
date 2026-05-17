@@ -2,7 +2,7 @@ package com.cks.tetris.controller;
 
 import com.cks.tetris.factory.BlockFactory;
 import com.cks.tetris.math.RotationMatrix;
-import com.cks.tetris.model.Block;
+import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Direction;
 import com.cks.tetris.model.Point;

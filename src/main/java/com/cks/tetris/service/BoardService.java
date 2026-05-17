@@ -1,6 +1,6 @@
 package com.cks.tetris.service;
 
-import com.cks.tetris.model.Block;
+import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Point;
 import com.cks.tetris.model.Tile;

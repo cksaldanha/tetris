@@ -1,7 +1,7 @@
 package com.cks.tetris.service;
 
 import com.cks.tetris.math.RotationMatrix;
-import com.cks.tetris.model.Block;
+import com.cks.tetris.model.block.Block;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
