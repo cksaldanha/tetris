@@ -14,15 +14,13 @@ import java.awt.*;
 @SpringBootApplication
 public class Application {
 
-    private static JFrame frame;
-
     public static void main(String[] args) {
         ConfigurableApplicationContext context = new SpringApplicationBuilder(Application.class)
                 .headless(false)
                 .run(args);
 
         EventQueue.invokeLater(() -> {
-            JFrame app = context.getBean("mainWindow", JFrame.class);
+            JFrame app = context.getBean("mainDialog", JFrame.class);
             app.setVisible(true);
         });
     }
