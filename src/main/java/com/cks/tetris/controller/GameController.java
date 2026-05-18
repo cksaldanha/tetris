@@ -10,6 +10,7 @@ import com.cks.tetris.model.state.GameState;
 import com.cks.tetris.service.BlockService;
 import com.cks.tetris.service.BoardService;
 import com.cks.tetris.ui.BoardPanel;
+import com.cks.tetris.ui.ScorePanel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +23,15 @@ import java.util.Set;
 public class GameController {
 
     private final BoardPanel boardPanel;
+    private final ScorePanel scorePanel;
     private final BoardService boardService;
     private final BlockService blockService;
     private final BlockFactory blockFactory;
 
     @Autowired
-    public GameController(BoardPanel boardPanel, BoardService boardService, BlockService blockService, BlockFactory blockFactory) {
+    public GameController(BoardPanel boardPanel, ScorePanel scorePanel, BoardService boardService, BlockService blockService, BlockFactory blockFactory) {
         this.boardPanel = boardPanel;
+        this.scorePanel = scorePanel;
         this.boardService = boardService;
         this.blockService = blockService;
         this.blockFactory = blockFactory;
@@ -45,7 +48,7 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, rotatedBlock, position)) {
             board = boardService.setActiveBlock(board, rotatedBlock, position);
-            state = new GameState(board, 0);
+            state = new GameState(board, state.score());
             updateBoard(board);
         }
 
@@ -61,7 +64,7 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
-            state = new GameState(board, 0);
+            state = new GameState(board, state.score());
             updateBoard(board);
         }
 
@@ -77,11 +80,11 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
-            state = new GameState(board, 0);
+            state = new GameState(board, state.score());
         } else {
             board = boardService.lockActiveBlock(board);
             board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = new GameState(board, 0);
+            state = new GameState(board, state.score());
         }
 
         updateBoard(board);
@@ -90,12 +93,15 @@ public class GameController {
 
     public GameState clearFullRows(GameState state) {
         Board board = state.board();
+        long score = state.score();
         Set<Integer> fullRows = boardService.getFullRows(board);
 
         if (!fullRows.isEmpty()) {
             board = boardService.removeRows(board, fullRows);
-            state = new GameState(board, 0);
+            score += (10L * fullRows.size() * fullRows.size());
+            state = new GameState(board, score);
             updateBoard(board);
+            updateScore(score);
         }
 
         return state;
@@ -104,5 +110,9 @@ public class GameController {
     private void updateBoard(Board board) {
         log.debug("Updating board panel with new game state");
         EventQueue.invokeLater(() -> boardPanel.setBoard(board));
+    }
+
+    private void updateScore(long score) {
+        EventQueue.invokeLater(() -> scorePanel.setScore(score));
     }
 }
