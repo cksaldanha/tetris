@@ -1,14 +1,16 @@
 package com.cks.tetris.ui;
 
-import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Point;
+import com.cks.tetris.model.block.Block;
+import com.cks.tetris.model.state.GameState;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Component
@@ -17,12 +19,13 @@ public class BoardPanel extends JPanel {
     private Board board;
 
     @Autowired
-    public BoardPanel() {
+    public BoardPanel(AtomicReference<GameState> gameState) {
         super(null);
         Dimension size = new Dimension(300, 600);
         setPreferredSize(size);
         setMinimumSize(size);
         setBorder(BorderFactory.createLineBorder(getBackground().darker(), 2));
+        this.board = gameState.get().getBoard();
     }
 
     public void setBoard(Board board) {
