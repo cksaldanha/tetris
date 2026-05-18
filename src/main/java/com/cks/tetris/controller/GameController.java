@@ -2,10 +2,11 @@ package com.cks.tetris.controller;
 
 import com.cks.tetris.factory.BlockFactory;
 import com.cks.tetris.math.RotationMatrix;
-import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Direction;
 import com.cks.tetris.model.Point;
+import com.cks.tetris.model.block.Block;
+import com.cks.tetris.model.state.GameState;
 import com.cks.tetris.service.BlockService;
 import com.cks.tetris.service.BoardService;
 import com.cks.tetris.ui.BoardPanel;
@@ -33,10 +34,10 @@ public class GameController {
         this.blockFactory = blockFactory;
     }
 
-    public void rotateActiveBlock(RotationMatrix rotationMatrix) {
+    public GameState rotateActiveBlock(GameState state, RotationMatrix rotationMatrix) {
         log.debug("Rotating active block with rotation matrix: {}", rotationMatrix);
 
-        Board board = boardPanel.getBoard();
+        Board board = state.getBoard();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition();
 
@@ -44,25 +45,31 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, rotatedBlock, position)) {
             board = boardService.setActiveBlock(board, rotatedBlock, position);
+            state = new GameState(board);
             updateBoard(board);
         }
+
+        return state;
     }
 
-    public void moveActiveBlock(Direction direction) {
+    public GameState moveActiveBlock(GameState state, Direction direction) {
         log.debug("Moving active block in direction: {}", direction);
 
-        Board board = boardPanel.getBoard();
+        Board board = state.getBoard();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition().move(direction,1);
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
+            state = new GameState(board);
             updateBoard(board);
         }
+
+        return state;
     }
 
-    public void lowerActiveBlock() {
-        Board board = boardPanel.getBoard();
+    public GameState lowerActiveBlock(GameState state) {
+        Board board = state.getBoard();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition().moveDown(1);
 
@@ -70,25 +77,31 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
+            state = new GameState(board);
         } else {
             board = boardService.lockActiveBlock(board);
             board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
+            state = new GameState(board);
         }
 
         updateBoard(board);
+        return state;
     }
 
-    public void clearFullRows() {
-        Board board = boardPanel.getBoard();
+    public GameState clearFullRows(GameState state) {
+        Board board = state.getBoard();
         Set<Integer> fullRows = boardService.getFullRows(board);
 
         if (!fullRows.isEmpty()) {
             board = boardService.removeRows(board, fullRows);
+            state = new GameState(board);
             updateBoard(board);
         }
+
+        return state;
     }
 
-    public final void updateBoard(Board board) {
+    private void updateBoard(Board board) {
         log.debug("Updating board panel with new game state");
         EventQueue.invokeLater(() -> boardPanel.setBoard(board));
     }
