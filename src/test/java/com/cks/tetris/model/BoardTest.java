@@ -20,7 +20,7 @@ class BoardTest {
 
         @Test
         void whenHasFullRows() {
-            Tile t = new Tile(GREEN);
+            Tile t = Tile.ofColor(GREEN);
             tiles = new Tile[][]{
                     {null, null, null},
                     {t, t, t},
@@ -37,7 +37,7 @@ class BoardTest {
 
         @Test
         void whenOnlyPartialRows() {
-            Tile t = new Tile(GREEN);
+            Tile t = Tile.ofColor(GREEN);
             tiles = new Tile[][]{
                     {t, null, null},
                     {null, t, null},
@@ -58,7 +58,7 @@ class BoardTest {
 
         @BeforeEach
         void setUp() {
-            Tile t = new Tile(GREEN);
+            Tile t = Tile.ofColor(GREEN);
             Tile[][] tiles = new Tile[][]{
                     {t, null, null},
                     {t, t, null},

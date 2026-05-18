@@ -30,7 +30,7 @@ public class BoardService {
             int x = activeBlockPosition.x + offset.x;
             int y = activeBlockPosition.y + offset.y;
 
-            newTiles[y][x] = new Tile(activeBlock.getColor());
+            newTiles[y][x] = Tile.ofColor(activeBlock.getColor());
         }
 
         return new Board(newTiles, activeBlock, activeBlockPosition);

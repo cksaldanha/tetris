@@ -89,7 +89,7 @@ class BoardServiceTest {
         @DisplayName("should return false if any part of the block overlaps with an existing tile")
         void whenOverlapping() {
             Tile[][] tiles = sampleBoard.getTiles();
-            tiles[5][0] = new Tile(GREEN);
+            tiles[5][0] = Tile.ofColor(GREEN);
             Board boardWithTile = new Board(tiles, sampleBlock, samplePosition);
 
             assertThat(service.canPlaceBlock(boardWithTile, sampleBlock, samplePosition)).isFalse();
@@ -116,7 +116,7 @@ class BoardServiceTest {
 
     @Nested
     class RemoveRowsTest {
-        Tile t = new Tile(GREEN);
+        Tile t = Tile.ofColor(GREEN);
         Tile[][] tiles;
         Board board;
 
