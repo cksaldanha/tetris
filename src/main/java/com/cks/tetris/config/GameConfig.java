@@ -3,9 +3,9 @@ package com.cks.tetris.config;
 import com.cks.tetris.factory.BlockFactory;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Point;
-import com.cks.tetris.model.Tile;
 import com.cks.tetris.model.block.*;
 import com.cks.tetris.model.state.GameState;
+import com.cks.tetris.math.Matrix;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class GameConfig {
         int rows = gameProperties.getRowCount();
         int cols = gameProperties.getColumnCount();
         Block startingBlock = blockFactory.getBlock();
-        Board startingBoard = new Board(new Tile[rows][cols], startingBlock, Point.of(cols / 2, 0));
+        Board startingBoard = new Board(new Matrix<>(rows, cols), startingBlock, Point.of(cols / 2, 0));
         GameState initialState = new GameState(startingBoard, 0);
         return new AtomicReference<>(initialState);
     }

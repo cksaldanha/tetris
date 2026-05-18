@@ -1,6 +1,7 @@
 package com.cks.tetris.model;
 
 import com.cks.tetris.model.block.Block;
+import com.cks.tetris.math.Matrix;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -14,53 +15,49 @@ import java.util.stream.IntStream;
 @EqualsAndHashCode
 public class Board {
 
-    private final int rowCount;
-    private final int columnCount;
     private final Block activeBlock;
     private final Point activeBlockPosition;
-    private final Tile[][] tiles;
+    private final Matrix<Tile> tiles;
 
-    public Board(Tile[][] tiles, Block activeBlock, Point activeBlockPosition) {
-        this.tiles = tiles.clone();
-        this.rowCount = tiles.length;
-        this.columnCount = tiles[0].length;
+    public Board(Matrix<Tile> tiles, Block activeBlock, Point activeBlockPosition) {
+        this.tiles = tiles;
         this.activeBlock = activeBlock;
         this.activeBlockPosition = activeBlockPosition;
     }
 
-    public Tile[][] getTiles() {
-        return tiles.clone();
-    }
-
-    public Tile getTile(int r, int c) {
-        return tiles[r][c];
+    public Matrix<Tile> getTiles() {
+        return tiles;
     }
 
     public Tile getTileAtCoordinates(int x, int y) {
-        return tiles[y][x];
+        return tiles.get(y, x);
     }
 
     public boolean containsTileAtCoordinates(int x, int y) {
-        return !isOut(x, y) && getTileAtCoordinates(x, y) != null;
+        return tiles.get(y, x) != null;
+    }
+
+    public int getRowCount() {
+        return tiles.getRowCount();
+    }
+
+    public int getColumnCount() {
+        return tiles.getColumnCount();
     }
 
     public Set<Integer> getFullRows() {
-        return IntStream.range(0, rowCount)
+        return IntStream.range(0, tiles.getRowCount())
                 .filter(this::isFullRow)
                 .boxed()
                 .collect(Collectors.toSet());
     }
 
     private boolean isFullRow(int row) {
-        for (int c = 0; c < columnCount; c++) {
-            if (tiles[row][c] == null) {
+        for (int c = 0; c < tiles.getColumnCount(); c++) {
+            if (tiles.get(row, c) == null) {
                 return false;
             }
         }
         return true;
-    }
-
-    private boolean isOut(int x, int y) {
-        return y < 0 || y >= rowCount || x < 0 || x >= columnCount;
     }
 }

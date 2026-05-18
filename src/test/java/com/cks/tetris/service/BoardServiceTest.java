@@ -1,9 +1,12 @@
 package com.cks.tetris.service;
 
-import com.cks.tetris.model.*;
+import com.cks.tetris.model.Board;
+import com.cks.tetris.model.Point;
+import com.cks.tetris.model.Tile;
 import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.block.IBlock;
 import com.cks.tetris.model.block.TBlock;
+import com.cks.tetris.math.Matrix;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,6 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static com.cks.tetris.model.Color.GREEN;
@@ -35,7 +40,7 @@ class BoardServiceTest {
 
         samplePosition = Point.of(0, 5);
 
-        sampleBoard = new Board(new Tile[20][10], sampleBlock, samplePosition);
+        sampleBoard = new Board(new Matrix<>(20, 10), sampleBlock, samplePosition);
     }
 
     @Nested
@@ -88,9 +93,9 @@ class BoardServiceTest {
         @Test
         @DisplayName("should return false if any part of the block overlaps with an existing tile")
         void whenOverlapping() {
-            Tile[][] tiles = sampleBoard.getTiles();
-            tiles[5][0] = Tile.ofColor(GREEN);
-            Board boardWithTile = new Board(tiles, sampleBlock, samplePosition);
+            List<List<Tile>> tiles = sampleBoard.getTiles().getAll();
+            tiles.get(5).set(0, Tile.ofColor(GREEN));
+            Board boardWithTile = new Board(new Matrix<>(tiles), sampleBlock, samplePosition);
 
             assertThat(service.canPlaceBlock(boardWithTile, sampleBlock, samplePosition)).isFalse();
         }
@@ -117,51 +122,51 @@ class BoardServiceTest {
     @Nested
     class RemoveRowsTest {
         Tile t = Tile.ofColor(GREEN);
-        Tile[][] tiles;
+        List<List<Tile>> tiles;
         Board board;
 
         @BeforeEach
         void setUp() {
-            tiles = new Tile[][]{
-                    {t, null},
-                    {t, t},
-                    {null, t},
-                    {t, t},
-            };
+            tiles = List.of(
+                    Arrays.asList(t, null),
+                    Arrays.asList(t, t),
+                    Arrays.asList(null, t),
+                    Arrays.asList(t, t)
+            );
 
-            board = new Board(tiles, null, null);
+            board = new Board(new Matrix<>(tiles), null, null);
         }
 
         @Test
         void whenSingleRow() {
-            Tile[][] expected = new Tile[][]{
-                    {null, null},
-                    {t, null},
-                    {t, t},
-                    {null, t},
-            };
+            List<List<Tile>> expected = List.of(
+                    Arrays.asList(null, null),
+                    Arrays.asList(t, null),
+                    Arrays.asList(t, t),
+                    Arrays.asList(null, t)
+            );
 
             Board actual = service.removeRows(board, Set.of(3));
 
             assertThat(actual)
                     .extracting(Board::getTiles)
-                    .isEqualTo(expected);
+                    .isEqualTo(new Matrix<>(expected));
         }
 
         @Test
         void whenMultipleRows() {
-            Tile[][] expected = new Tile[][]{
-                    {null, null},
-                    {null, null},
-                    {t, null},
-                    {null, t},
-            };
+            List<List<Tile>> expected = List.of(
+                    Arrays.asList(null, null),
+                    Arrays.asList(null, null),
+                    Arrays.asList(t, null),
+                    Arrays.asList(null, t)
+            );
 
             Board actual = service.removeRows(board, Set.of(1, 3));
 
             assertThat(actual)
                     .extracting(Board::getTiles)
-                    .isEqualTo(expected);
+                    .isEqualTo(new Matrix<>(expected));
         }
     }
 
