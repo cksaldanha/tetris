@@ -1,21 +1,20 @@
 package com.cks.tetris.event;
 
-import com.cks.tetris.controller.GameController;
 import com.cks.tetris.model.state.GameState;
 import org.springframework.context.ApplicationEvent;
 
-import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 public class GameEvent extends ApplicationEvent {
 
-    private final BiFunction<GameState, GameController, GameState> updateFunction;
+    private final UnaryOperator<GameState> operator;
 
-    public GameEvent(Object source, BiFunction<GameState, GameController, GameState> updateFunction) {
+    public GameEvent(Object source, UnaryOperator<GameState> operator) {
         super(source);
-        this.updateFunction = updateFunction;
+        this.operator = operator;
     }
 
-    public BiFunction<GameState, GameController, GameState> getUpdateFunction() {
-        return updateFunction;
+    public UnaryOperator<GameState> getOperator() {
+        return operator;
     }
 }
