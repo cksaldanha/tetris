@@ -37,7 +37,7 @@ public class GameController {
     public GameState rotateActiveBlock(GameState state, RotationMatrix rotationMatrix) {
         log.debug("Rotating active block with rotation matrix: {}", rotationMatrix);
 
-        Board board = state.getBoard();
+        Board board = state.board();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition();
 
@@ -55,7 +55,7 @@ public class GameController {
     public GameState moveActiveBlock(GameState state, Direction direction) {
         log.debug("Moving active block in direction: {}", direction);
 
-        Board board = state.getBoard();
+        Board board = state.board();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition().move(direction,1);
 
@@ -69,7 +69,7 @@ public class GameController {
     }
 
     public GameState lowerActiveBlock(GameState state) {
-        Board board = state.getBoard();
+        Board board = state.board();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition().moveDown(1);
 
@@ -89,7 +89,7 @@ public class GameController {
     }
 
     public GameState clearFullRows(GameState state) {
-        Board board = state.getBoard();
+        Board board = state.board();
         Set<Integer> fullRows = boardService.getFullRows(board);
 
         if (!fullRows.isEmpty()) {

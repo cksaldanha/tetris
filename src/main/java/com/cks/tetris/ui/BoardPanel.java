@@ -29,7 +29,7 @@ public class BoardPanel extends JPanel {
         setPreferredSize(size);
         setMinimumSize(size);
         setBorder(BorderFactory.createLineBorder(getBackground().darker(), 2));
-        this.board = gameState.get().getBoard();
+        this.board = gameState.get().board();
     }
 
     public void setBoard(Board board) {
