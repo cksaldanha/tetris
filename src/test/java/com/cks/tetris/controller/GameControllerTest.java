@@ -5,13 +5,13 @@ import com.cks.tetris.math.RotationMatrix;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Direction;
 import com.cks.tetris.model.Point;
-import com.cks.tetris.model.Tile;
 import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.block.TBlock;
 import com.cks.tetris.model.state.GameState;
 import com.cks.tetris.service.BlockService;
 import com.cks.tetris.service.BoardService;
 import com.cks.tetris.ui.BoardPanel;
+import com.cks.tetris.math.Matrix;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -56,7 +56,7 @@ class GameControllerTest {
         void setUp() {
             block = new TBlock();
             position = Point.ORIGIN;
-            board = spy(new Board(new Tile[20][10], block, position));
+            board = spy(new Board(new Matrix<>(20, 10), block, position));
         }
 
         @Test
@@ -101,7 +101,7 @@ class GameControllerTest {
         void setUp() {
             block = new TBlock();
             originalPosition = Point.ORIGIN;
-            board = spy(new Board(new Tile[20][10], block, originalPosition));
+            board = spy(new Board(new Matrix<>(20, 10), block, originalPosition));
         }
 
         @Test
@@ -144,7 +144,7 @@ class GameControllerTest {
         void setUp() {
             block = new TBlock();
             originalPosition = Point.of(0, 0);
-            board = spy(new Board(new Tile[20][10], block, originalPosition));
+            board = spy(new Board(new Matrix<>(20, 10), block, originalPosition));
         }
 
         @Test

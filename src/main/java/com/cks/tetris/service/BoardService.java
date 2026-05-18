@@ -4,9 +4,11 @@ import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Point;
 import com.cks.tetris.model.Tile;
+import com.cks.tetris.math.Matrix;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -24,16 +26,16 @@ public class BoardService {
         Block activeBlock = board.getActiveBlock();
         Point activeBlockPosition = board.getActiveBlockPosition();
 
-        Tile[][] newTiles = board.getTiles();
+        List<List<Tile>> tiles = board.getTiles().getAll();
 
         for (Point offset : activeBlock.getOffsets()) {
             int x = activeBlockPosition.x + offset.x;
             int y = activeBlockPosition.y + offset.y;
 
-            newTiles[y][x] = Tile.ofColor(activeBlock.getColor());
+            tiles.get(y).set(x, Tile.ofColor(activeBlock.getColor()));
         }
 
-        return new Board(newTiles, activeBlock, activeBlockPosition);
+        return new Board(new Matrix<>(tiles), activeBlock, activeBlockPosition);
     }
 
     public boolean canPlaceBlock(Board board, Block block, Point pos) {
@@ -57,19 +59,20 @@ public class BoardService {
     }
 
     public Board removeRows(Board board, Set<Integer> rowIndices) {
-        Tile[][] tiles = board.getTiles();
+        List<List<Tile>> tiles = board.getTiles().getAll();
+
         for (int r : rowIndices) {
             for (int c = 0; c < board.getColumnCount(); c++) {
-                tiles[r][c] = null;
+                tiles.get(r).set(c, null);
             }
         }
 
         int shift = 0;
         for (int r = board.getRowCount() - 1; r >= 0; r--) {
             for (int c = 0; c < board.getColumnCount(); c++) {
-                tiles[r + shift][c] = tiles[r][c];
+                tiles.get(r + shift).set(c, tiles.get(r).get(c));
                 if (shift > 0) {
-                    tiles[r][c] = null;
+                    tiles.get(r).set(c, null);
                 }
             }
             if (rowIndices.contains(r)) {
@@ -77,6 +80,6 @@ public class BoardService {
             }
         }
 
-        return new Board(tiles, board.getActiveBlock(), board.getActiveBlockPosition());
+        return new Board(new Matrix<>(tiles), board.getActiveBlock(), board.getActiveBlockPosition());
     }
 }

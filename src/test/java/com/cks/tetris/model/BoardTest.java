@@ -1,11 +1,14 @@
 package com.cks.tetris.model;
 
+import com.cks.tetris.math.Matrix;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static com.cks.tetris.model.Color.GREEN;
@@ -16,17 +19,18 @@ class BoardTest {
     @Nested
     class GetFullRowsTest {
         Board board;
-        Tile[][] tiles;
+        List<List<Tile>> tiles;
 
         @Test
         void whenHasFullRows() {
             Tile t = Tile.ofColor(GREEN);
-            tiles = new Tile[][]{
-                    {null, null, null},
-                    {t, t, t},
-                    {t, t, t},
-            };
-            board = new Board(tiles, null, null);
+            tiles = List.of(
+                    Arrays.asList(null, null, null),
+                    Arrays.asList(t, t, t),
+                    Arrays.asList(t, t, t)
+            );
+
+            board = new Board(new Matrix<>(tiles), null, null);
 
             Set<Integer> actual = board.getFullRows();
 
@@ -38,13 +42,13 @@ class BoardTest {
         @Test
         void whenOnlyPartialRows() {
             Tile t = Tile.ofColor(GREEN);
-            tiles = new Tile[][]{
-                    {t, null, null},
-                    {null, t, null},
-                    {null, null, t},
-            };
+            tiles = List.of(
+                    Arrays.asList(t, null, null),
+                    Arrays.asList(t, t, null),
+                    Arrays.asList(t, null, t)
+            );
 
-            board = new Board(tiles, null, null);
+            board = new Board(new Matrix<>(tiles), null, null);
 
             Set<Integer> actual = board.getFullRows();
 
@@ -59,14 +63,14 @@ class BoardTest {
         @BeforeEach
         void setUp() {
             Tile t = Tile.ofColor(GREEN);
-            Tile[][] tiles = new Tile[][]{
-                    {t, null, null},
-                    {t, t, null},
-                    {t, null, t},
-                    {t, t, t},
-            };
+            List<List<Tile>> tiles = List.of(
+                    Arrays.asList(t, null, null),
+                    Arrays.asList(t, t, null),
+                    Arrays.asList(t, null, t),
+                    Arrays.asList(t, t, t)
+            );
 
-            board = new Board(tiles, null, null);
+            board = new Board(new Matrix<>(tiles), null, null);
         }
 
         @ParameterizedTest
