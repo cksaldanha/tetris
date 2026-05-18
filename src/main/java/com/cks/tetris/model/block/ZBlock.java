@@ -24,7 +24,7 @@ public class ZBlock extends Block {
     }
 
     @Override
-    public JBlock rotate(RotationMatrix rotationMatrix) {
-        return new JBlock(rotateOffsets(rotationMatrix));
+    public ZBlock rotate(RotationMatrix rotationMatrix) {
+        return new ZBlock(rotateOffsets(rotationMatrix));
     }
 }
