@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Map;
 
 @Configuration
@@ -28,5 +29,10 @@ public class UIConfig {
                 Color.NAVY, new java.awt.Color(39, 39, 245),
                 Color.ORANGE, new java.awt.Color(245, 165, 39)
         );
+    }
+
+    @Bean
+    public Font informationFont() {
+        return new Font("Courier New", Font.BOLD, 14);
     }
 }

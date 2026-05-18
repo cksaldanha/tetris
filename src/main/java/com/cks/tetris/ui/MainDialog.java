@@ -18,6 +18,7 @@ public class MainDialog extends JFrame {
     @Autowired
     public MainDialog(AboutDialog aboutDialog,
                       CommandDialog commandDialog,
+                      InformationPanel informationPanel,
                       BoardPanel boardPanel,
                       DirectionKeyListener directionKeyListener,
                       RotationKeyListener rotationKeyListener) {
@@ -31,9 +32,7 @@ public class MainDialog extends JFrame {
         addKeyListener(directionKeyListener);
         addKeyListener(rotationKeyListener);
 
-//        Info info = new Info();
-//        svc.scheduleWithFixedDelay(new Scorer(board), 0, 250, TimeUnit.MILLISECONDS);
-
+        add(informationPanel, BorderLayout.NORTH);
         add(boardPanel, BorderLayout.CENTER);
 
         pack();
