@@ -3,6 +3,7 @@ package com.cks.tetris.model.block;
 import com.cks.tetris.math.RotationMatrix;
 import com.cks.tetris.model.Color;
 import com.cks.tetris.model.Point;
+import com.cks.tetris.util.BlockUtils;
 
 import java.util.Set;
 
@@ -25,6 +26,6 @@ public class TBlock extends Block {
 
     @Override
     public TBlock rotate(RotationMatrix rotationMatrix) {
-        return new TBlock(rotateOffsets(rotationMatrix));
+        return new TBlock(BlockUtils.rotateOffsets(getOffsets(), rotationMatrix));
     }
 }
