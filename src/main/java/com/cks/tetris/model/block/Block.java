@@ -6,7 +6,6 @@ import com.cks.tetris.model.Point;
 import com.cks.tetris.model.Rotatable;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public abstract class Block implements Rotatable {
 
@@ -29,10 +28,6 @@ public abstract class Block implements Rotatable {
 
     @Override
     public abstract Block rotate(RotationMatrix rotationMatrix);
-
-    protected Set<Point> rotateOffsets(RotationMatrix rotationMatrix) {
-        return offsets.stream().map(pt -> pt.rotate(rotationMatrix)).collect(Collectors.toSet());
-    }
 
     @Override
     public boolean equals(Object o) {
