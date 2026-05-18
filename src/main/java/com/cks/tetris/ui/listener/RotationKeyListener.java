@@ -1,20 +1,25 @@
 package com.cks.tetris.ui.listener;
 
+import com.cks.tetris.controller.GameController;
 import com.cks.tetris.event.GameEventPublisher;
-import com.cks.tetris.math.RotationMatrix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import static com.cks.tetris.math.RotationMatrix.CLOCK_WISE_90;
+import static com.cks.tetris.math.RotationMatrix.COUNTER_CLOCK_WISE_90;
+
 @Component
 public class RotationKeyListener implements KeyListener {
 
+    private final GameController gameController;
     private final GameEventPublisher gameEventPublisher;
 
     @Autowired
-    public RotationKeyListener(GameEventPublisher gameEventPublisher) {
+    public RotationKeyListener(GameController gameController, GameEventPublisher gameEventPublisher) {
+        this.gameController = gameController;
         this.gameEventPublisher = gameEventPublisher;
     }
 
@@ -27,14 +32,10 @@ public class RotationKeyListener implements KeyListener {
     public void keyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_R:
-                gameEventPublisher.publishGameEvent(
-                        (state, controller) -> controller.rotateActiveBlock(state, RotationMatrix.CLOCK_WISE_90)
-                );
+                gameEventPublisher.publishGameEvent(state -> gameController.rotateActiveBlock(state, CLOCK_WISE_90));
                 break;
             case KeyEvent.VK_F:
-                gameEventPublisher.publishGameEvent(
-                        (state, controller) -> controller.rotateActiveBlock(state, RotationMatrix.COUNTER_CLOCK_WISE_90)
-                );
+                gameEventPublisher.publishGameEvent(state -> gameController.rotateActiveBlock(state, COUNTER_CLOCK_WISE_90));
                 break;
         }
     }

@@ -1,20 +1,25 @@
 package com.cks.tetris.ui.listener;
 
+import com.cks.tetris.controller.GameController;
 import com.cks.tetris.event.GameEventPublisher;
-import com.cks.tetris.model.Direction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import static com.cks.tetris.model.Direction.LEFT;
+import static com.cks.tetris.model.Direction.RIGHT;
+
 @Component
 public class DirectionKeyListener implements KeyListener {
 
+    private final GameController gameController;
     private final GameEventPublisher gameEventPublisher;
 
     @Autowired
-    public DirectionKeyListener(GameEventPublisher gameEventPublisher) {
+    public DirectionKeyListener(GameController gameController, GameEventPublisher gameEventPublisher) {
+        this.gameController = gameController;
         this.gameEventPublisher = gameEventPublisher;
     }
 
@@ -26,13 +31,13 @@ public class DirectionKeyListener implements KeyListener {
     public void keyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_LEFT:
-                gameEventPublisher.publishGameEvent((state, controller) -> controller.moveActiveBlock(state, Direction.LEFT));
+                gameEventPublisher.publishGameEvent(state -> gameController.moveActiveBlock(state, LEFT));
                 break;
             case KeyEvent.VK_RIGHT:
-                gameEventPublisher.publishGameEvent((state, controller) -> controller.moveActiveBlock(state, Direction.RIGHT));
+                gameEventPublisher.publishGameEvent(state -> gameController.moveActiveBlock(state, RIGHT));
                 break;
             case KeyEvent.VK_DOWN:
-                gameEventPublisher.publishGameEvent((state, controller) -> controller.lowerActiveBlock(state));
+                gameEventPublisher.publishGameEvent(gameController::lowerActiveBlock);
                 break;
          }
    }
