@@ -41,7 +41,7 @@ public class Board {
     }
 
     public boolean containsTileAtCoordinates(int x, int y) {
-        return getTileAtCoordinates(x, y) != null;
+        return !isOut(x, y) && getTileAtCoordinates(x, y) != null;
     }
 
     public Set<Integer> getFullRows() {
@@ -58,5 +58,9 @@ public class Board {
             }
         }
         return true;
+    }
+
+    private boolean isOut(int x, int y) {
+        return y < 0 || y >= rowCount || x < 0 || x >= columnCount;
     }
 }
