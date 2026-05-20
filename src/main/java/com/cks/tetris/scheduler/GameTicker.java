@@ -1,6 +1,7 @@
 package com.cks.tetris.scheduler;
 
 import com.cks.tetris.controller.GameController;
+import com.cks.tetris.event.BoardEvent;
 import com.cks.tetris.event.GameEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,8 +21,8 @@ public class GameTicker {
 
     @Scheduled(fixedDelay = 500L, initialDelay = 500L)
     public void tick() {
-        gameEventPublisher.publishGameEvent(gameController::lowerActiveBlock);
-        gameEventPublisher.publishGameEvent(gameController::clearFullRows);
+        gameEventPublisher.publishGameEvent(new BoardEvent(this, gameController::lowerActiveBlock));
+        gameEventPublisher.publishGameEvent(new BoardEvent(this, gameController::clearFullRows));
     }
 
 }

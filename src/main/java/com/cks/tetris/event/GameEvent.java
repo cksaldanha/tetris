@@ -5,11 +5,11 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.function.UnaryOperator;
 
-public class GameEvent extends ApplicationEvent {
+public abstract class GameEvent extends ApplicationEvent {
 
     private final UnaryOperator<GameState> operator;
 
-    public GameEvent(Object source, UnaryOperator<GameState> operator) {
+    protected GameEvent(Object source, UnaryOperator<GameState> operator) {
         super(source);
         this.operator = operator;
     }
