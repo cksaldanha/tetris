@@ -62,7 +62,7 @@ class GameControllerTest {
         @Test
         @DisplayName("should result in a new state and update the board panel")
         void whenCanRotateBlock() {
-            GameState original = new GameState(board, 0);
+            GameState original = new GameState(board, 0, false);
 
             when(blockService.rotateBlock(block, RotationMatrix.CLOCK_WISE_90)).thenReturn(block);
             when(boardService.canPlaceBlock(board, block, position)).thenReturn(true);
@@ -77,7 +77,7 @@ class GameControllerTest {
         @Test
         @DisplayName("should not update the board panel and should keep the state the same")
         void whenCannotRotateBlock() {
-            GameState original = new GameState(board, 0);
+            GameState original = new GameState(board, 0, false);
 
             when(boardService.canPlaceBlock(board, block, position)).thenReturn(false);
             when(blockService.rotateBlock(block, RotationMatrix.CLOCK_WISE_90)).thenReturn(block);
@@ -112,7 +112,7 @@ class GameControllerTest {
             when(boardService.canPlaceBlock(board, block, movedPosition)).thenReturn(true);
             when(boardService.setActiveBlock(board, block, movedPosition)).thenReturn(board);
 
-            GameState original = new GameState(board, 0);
+            GameState original = new GameState(board, 0, false);
 
             GameState actual = controller.moveActiveBlock(original, direction);
 
@@ -125,7 +125,7 @@ class GameControllerTest {
         void whenCannotMoveBlock() {
             when(boardService.canPlaceBlock(any(Board.class), any(Block.class), any(Point.class))).thenReturn(false);
 
-            GameState original = new GameState(board, 0);
+            GameState original = new GameState(board, 0, false);
 
             GameState actual = controller.moveActiveBlock(original, Direction.LEFT);
 
@@ -154,7 +154,7 @@ class GameControllerTest {
             when(boardService.canPlaceBlock(board, block, loweredPosition)).thenReturn(true);
             when(boardService.setActiveBlock(board, block, loweredPosition)).thenReturn(board);
 
-            GameState original = new GameState(board, 0);
+            GameState original = new GameState(board, 0, false);
 
             GameState actual = controller.lowerActiveBlock(original);
 
@@ -173,7 +173,7 @@ class GameControllerTest {
             when(blockFactory.getBlock()).thenReturn(block);
             when(boardService.setActiveBlock(board, block, centeredPosition)).thenReturn(board);
 
-            GameState original = new GameState(board, 0);
+            GameState original = new GameState(board, 0, false);
 
             GameState actual = controller.lowerActiveBlock(original);
 
@@ -194,7 +194,7 @@ class GameControllerTest {
             when(boardService.getFullRows(board)).thenReturn(fullRows);
             when(boardService.removeRows(board, fullRows)).thenReturn(board);
 
-            GameState original = new GameState(board, 0);
+            GameState original = new GameState(board, 0, false);
 
             GameState actual = controller.clearFullRows(original);
 
@@ -208,7 +208,7 @@ class GameControllerTest {
             Board board = mock(Board.class);
             when(boardService.getFullRows(board)).thenReturn(Collections.emptySet());
 
-            GameState original = new GameState(board, 0);
+            GameState original = new GameState(board, 0, false);
 
             GameState actual = controller.clearFullRows(original);
 

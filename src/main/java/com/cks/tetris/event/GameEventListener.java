@@ -19,6 +19,6 @@ public class GameEventListener implements ApplicationListener<GameEvent> {
 
     @Override
     public void onApplicationEvent(GameEvent event) {
-        gameState.set(event.getOperator().apply(gameState.get()));
+        gameState.getAndUpdate(state -> event.getOperator().apply(state));
     }
 }

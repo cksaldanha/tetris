@@ -1,6 +1,7 @@
 package com.cks.tetris.ui.listener;
 
 import com.cks.tetris.controller.GameController;
+import com.cks.tetris.event.BoardEvent;
 import com.cks.tetris.event.GameEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,10 +33,10 @@ public class RotationKeyListener implements KeyListener {
     public void keyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_R:
-                gameEventPublisher.publishGameEvent(state -> gameController.rotateActiveBlock(state, CLOCK_WISE_90));
+                gameEventPublisher.publishGameEvent(new BoardEvent(this, state -> gameController.rotateActiveBlock(state, CLOCK_WISE_90)));
                 break;
             case KeyEvent.VK_F:
-                gameEventPublisher.publishGameEvent(state -> gameController.rotateActiveBlock(state, COUNTER_CLOCK_WISE_90));
+                gameEventPublisher.publishGameEvent(new BoardEvent(this, state -> gameController.rotateActiveBlock(state, COUNTER_CLOCK_WISE_90)));
                 break;
         }
     }

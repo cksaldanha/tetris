@@ -48,7 +48,7 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, rotatedBlock, position)) {
             board = boardService.setActiveBlock(board, rotatedBlock, position);
-            state = new GameState(board, state.score());
+            state = new GameState(board, state.score(), state.paused());
             updateBoard(board);
         }
 
@@ -64,7 +64,7 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
-            state = new GameState(board, state.score());
+            state = new GameState(board, state.score(), state.paused());
             updateBoard(board);
         }
 
@@ -80,11 +80,11 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
-            state = new GameState(board, state.score());
+            state = new GameState(board, state.score(), state.paused());
         } else {
             board = boardService.lockActiveBlock(board);
             board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = new GameState(board, state.score());
+            state = new GameState(board, state.score(), state.paused());
         }
 
         updateBoard(board);
@@ -99,7 +99,7 @@ public class GameController {
         if (!fullRows.isEmpty()) {
             board = boardService.removeRows(board, fullRows);
             score += (10L * fullRows.size() * fullRows.size());
-            state = new GameState(board, score);
+            state = new GameState(board, score, state.paused());
             updateBoard(board);
             updateScore(score);
         }
