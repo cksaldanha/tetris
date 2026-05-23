@@ -2,6 +2,12 @@ app:
   tetris:
     rowCount: 20
     columnCount: 10
+    score:
+      multiplier:
+        singleLine: 100
+        doubleLine: 300
+        tripleLine: 500
+        tetrisLine: 800
 
 logging:
   level:

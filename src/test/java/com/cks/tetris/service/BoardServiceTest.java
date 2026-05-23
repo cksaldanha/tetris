@@ -1,12 +1,12 @@
 package com.cks.tetris.service;
 
+import com.cks.tetris.math.Matrix;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Point;
 import com.cks.tetris.model.Tile;
 import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.block.IBlock;
 import com.cks.tetris.model.block.TBlock;
-import com.cks.tetris.math.Matrix;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,8 +21,7 @@ import java.util.Set;
 
 import static com.cks.tetris.model.Color.GREEN;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BoardServiceTest {
@@ -170,4 +169,54 @@ class BoardServiceTest {
         }
     }
 
+    @Nested
+    class GetMaximumDistanceToBottomTest {
+        Matrix<Tile> tiles;
+        Block block;
+
+        @BeforeEach
+        void setUp() {
+            Tile t = Tile.ofColor(GREEN);
+            tiles = new Matrix<>(List.of(
+                    Arrays.asList(null, null, null, null),
+                    Arrays.asList(null, null, null, null),
+                    Arrays.asList(null, null, null, null),
+                    Arrays.asList(null, null, null, null),
+                    Arrays.asList(null, null, null, null),
+                    Arrays.asList(null, null, t, t),
+                    Arrays.asList(null, t, t, t),
+                    Arrays.asList(t, t, null, t)
+            ));
+
+            block = mock(Block.class);
+            when(block.getOffsets()).thenReturn(Set.of(Point.ORIGIN));
+        }
+
+        @Test
+        void whenBlockIsLeft() {
+            Board board = new Board(tiles, block, Point.of(0, 0));
+
+            int actual = service.getMaximumDistanceToBottom(board);
+
+            assertThat(actual).isEqualTo(6);
+        }
+
+        @Test
+        void whenBlockIsRight() {
+            Board board = new Board(tiles, block, Point.of(tiles.getColumnCount() - 1, 0));
+
+            int actual = service.getMaximumDistanceToBottom(board);
+
+            assertThat(actual).isEqualTo(4);
+        }
+
+        @Test
+        void whenBlockIsMiddle() {
+            Board board = new Board(tiles, block, Point.of(1, 0));
+
+            int actual = service.getMaximumDistanceToBottom(board);
+
+            assertThat(actual).isEqualTo(5);
+        }
+    }
 }
