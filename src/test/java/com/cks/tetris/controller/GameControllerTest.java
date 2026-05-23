@@ -194,6 +194,55 @@ class GameControllerTest {
     }
 
     @Nested
+    class SoftDropActiveBlockTest {
+
+        Block block;
+        Point originalPosition;
+        Board board;
+
+        @BeforeEach
+        void setUp() {
+            block = mock(Block.class);
+            originalPosition = Point.of(5, 0);
+            board = spy(new Board(new Matrix<>(20, 10), block, originalPosition));
+        }
+
+        @Test
+        @DisplayName("should set active block by one row, update board panel and increase score by 1")
+        void whenCanLower() {
+            GameState originalState = new GameState(board, new Score(0, 0), false);
+            Point loweredPosition = originalPosition.moveDown(1);
+
+            when(boardService.canPlaceBlock(board, block, loweredPosition)).thenReturn(true);
+            when(boardService.setActiveBlock(board, block, loweredPosition)).thenReturn(board);
+            when(scoreService.increase(any(Score.class), anyInt())).thenReturn(new Score(1, 0));
+
+            GameState actualState = controller.softDropActiveBlock(originalState);
+
+            assertThat(actualState)
+                    .isNotSameAs(originalState)
+                    .extracting("score").isEqualTo(new Score(1, 0));
+        }
+
+        @Test
+        void whenCannotLower() {
+            Score score = new Score(0, 0);
+            GameState originalState = new GameState(board, score, false);
+            Point loweredPosition = originalPosition.moveDown(1);
+
+            when(boardService.canPlaceBlock(board, block, loweredPosition)).thenReturn(false);
+            when(boardService.lockActiveBlock(any(Board.class))).thenReturn(board);
+            when(blockFactory.getBlock()).thenReturn(block);
+            when(boardService.setActiveBlock(any(Board.class), any(Block.class), any(Point.class))).thenReturn(board);
+
+            GameState actualState = controller.softDropActiveBlock(originalState);
+
+            assertThat(actualState).isEqualTo(originalState);
+            verify(boardService).lockActiveBlock(board);
+        }
+    }
+
+    @Nested
     class ClearFullRowsTest {
 
         @Test
