@@ -38,6 +38,18 @@ public class BoardService {
         return new Board(new Matrix<>(tiles), activeBlock, activeBlockPosition);
     }
 
+    public int getMaximumDistanceToBottom(Board board) {
+        Block block = board.getActiveBlock();
+        Point position = board.getActiveBlockPosition();
+
+        int steps = 1;
+        while (canPlaceBlock(board, block, position.moveDown(steps))) {
+            steps++;
+        }
+
+        return steps - 1;
+    }
+
     public boolean canPlaceBlock(Board board, Block block, Point pos) {
         for (Point offset : block.getOffsets()) {
             int x = pos.x + offset.x;
