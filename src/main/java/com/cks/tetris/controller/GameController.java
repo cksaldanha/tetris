@@ -95,6 +95,28 @@ public class GameController {
         return state;
     }
 
+    public GameState hardDropActiveBlock(GameState state) {
+        Board board = state.board();
+        Block block = board.getActiveBlock();
+        Point position = board.getActiveBlockPosition();
+        Score score = state.score();
+
+        int distance = boardService.getMaximumDistanceToBottom(board);
+        if (distance > 0) {
+            board = boardService.setActiveBlock(board, block, position.moveDown(distance));
+            score = scoreService.increase(score, 2 * distance);
+            state = new GameState(board, score, state.paused());
+        } else {
+            board = boardService.lockActiveBlock(board);
+            board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
+            state = new GameState(board, score, state.paused());
+        }
+
+        updateBoard(board);
+        updateScore(score);
+        return state;
+    }
+
     public GameState clearFullRows(GameState state) {
         Board board = state.board();
         Score score = state.score();

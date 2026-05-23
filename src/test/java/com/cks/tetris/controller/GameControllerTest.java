@@ -6,6 +6,7 @@ import com.cks.tetris.math.RotationMatrix;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Direction;
 import com.cks.tetris.model.Point;
+import com.cks.tetris.model.block.OBlock;
 import com.cks.tetris.model.state.Score;
 import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.block.TBlock;
@@ -224,6 +225,49 @@ class GameControllerTest {
             GameState actual = controller.clearFullRows(original);
 
             assertThat(actual).isSameAs(original);
+        }
+    }
+
+    @Nested
+    class HardDropActiveBlockTest {
+        Block block;
+        Point position;
+        Board board;
+        Score score;
+
+        @BeforeEach
+        void setUp() {
+            block = new OBlock();
+            position = Point.ORIGIN;
+            score = new Score(0, 0);
+            board = new Board(new Matrix<>(20, 10), block, position);
+        }
+
+        @Test
+        void whenHasDistance() {
+            when(boardService.getMaximumDistanceToBottom(board)).thenReturn(5);
+            when(boardService.setActiveBlock(board, block, position.moveDown(5))).thenReturn(board);
+            when(scoreService.increase(any(Score.class), anyInt())).thenReturn(score);
+
+            GameState originalState = new GameState(board, score, false);
+
+            GameState modifiedState = controller.hardDropActiveBlock(originalState);
+
+            assertThat(modifiedState).isNotSameAs(originalState);
+            verify(scoreService).increase(score, 2 * 5);
+        }
+
+        @Test
+        void whenNoDistance() {
+            when(boardService.getMaximumDistanceToBottom(board)).thenReturn(0);
+            when(boardService.lockActiveBlock(board)).thenReturn(board);
+            when(boardService.setActiveBlock(any(), any(), any())).thenReturn(board);
+
+            GameState originalState = new GameState(board, score, false);
+
+            GameState modifiedState = controller.hardDropActiveBlock(originalState);
+
+            assertThat(modifiedState).isNotSameAs(originalState);
         }
     }
 }
