@@ -29,6 +29,7 @@ public class MainDialog extends JFrame {
         this.commandDialog = commandDialog;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Tetris");
         setJMenuBar(mainMenuBar());
 
         addKeyListener(directionKeyListener);
