@@ -1,5 +1,6 @@
 package com.cks.tetris.event;
 
+import com.cks.tetris.model.state.Score;
 import com.cks.tetris.model.state.GameState;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,7 +15,7 @@ class PauseEventTest {
         @Test
         @DisplayName("should create an UnaryOperator that flips the 'paused' field of game state")
         void whenCalled() {
-            GameState originalState = new GameState(null, 0, false);
+            GameState originalState = new GameState(null, new Score(0, 0), false);
             PauseEvent event = new PauseEvent(this);
 
             GameState modifiedState = event.getOperator().apply(originalState);

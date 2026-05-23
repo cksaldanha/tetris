@@ -1,5 +1,6 @@
 package com.cks.tetris.event;
 
+import com.cks.tetris.model.state.Score;
 import com.cks.tetris.model.state.GameState;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,8 +30,8 @@ class BoardEventTest {
         @Test
         @DisplayName("should return the same state if paused")
         void whenPaused() {
-            GameState originalState = new GameState(null, 0, true);
-            UnaryOperator<GameState> modifier = state -> new GameState(state.board(), 1, state.paused());
+            GameState originalState = new GameState(null, new Score(0, 0), true);
+            UnaryOperator<GameState> modifier = state -> new GameState(state.board(), state.score().addTotal(1), state.paused());
 
             BoardEvent event = new BoardEvent(this, modifier);
 
@@ -44,8 +45,8 @@ class BoardEventTest {
         @Test
         @DisplayName("should modify the state if unpaused")
         void whenUnpaused() {
-            GameState originalState = new GameState(null, 0, false);
-            UnaryOperator<GameState> originalOperator = state -> new GameState(state.board(), 1, state.paused());
+            GameState originalState = new GameState(null, new Score(0, 0), false);
+            UnaryOperator<GameState> originalOperator = state -> new GameState(state.board(), state.score().addTotal(1), state.paused());
 
             BoardEvent event = new BoardEvent(this, originalOperator);
 
@@ -54,7 +55,7 @@ class BoardEventTest {
 
             assertThat(actualState)
                     .isNotEqualTo(originalState)
-                    .extracting("score").isEqualTo(1L);
+                    .extracting("score").isEqualTo(new Score(1L, 0));
         }
     }
 }
