@@ -38,7 +38,7 @@ public class DirectionKeyListener implements KeyListener {
                 gameEventPublisher.publishGameEvent(new BoardEvent(this, state -> gameController.moveActiveBlock(state, RIGHT)));
                 break;
             case KeyEvent.VK_DOWN:
-                gameEventPublisher.publishGameEvent(new BoardEvent(this, gameController::lowerActiveBlock));
+                gameEventPublisher.publishGameEvent(new BoardEvent(this, gameController::softDropActiveBlock));
                 break;
         }
     }
