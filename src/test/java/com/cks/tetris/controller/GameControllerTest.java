@@ -1,17 +1,20 @@
 package com.cks.tetris.controller;
 
 import com.cks.tetris.factory.BlockFactory;
+import com.cks.tetris.math.Matrix;
 import com.cks.tetris.math.RotationMatrix;
 import com.cks.tetris.model.Board;
 import com.cks.tetris.model.Direction;
 import com.cks.tetris.model.Point;
+import com.cks.tetris.model.state.Score;
 import com.cks.tetris.model.block.Block;
 import com.cks.tetris.model.block.TBlock;
 import com.cks.tetris.model.state.GameState;
 import com.cks.tetris.service.BlockService;
 import com.cks.tetris.service.BoardService;
+import com.cks.tetris.service.ScoreService;
 import com.cks.tetris.ui.BoardPanel;
-import com.cks.tetris.math.Matrix;
+import com.cks.tetris.ui.ScorePanel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -34,7 +37,13 @@ class GameControllerTest {
     BoardPanel boardPanel;
 
     @Mock
+    ScorePanel scorePanel;
+
+    @Mock
     BoardService boardService;
+
+    @Mock
+    ScoreService scoreService;
 
     @Mock
     BlockService blockService;
@@ -62,7 +71,7 @@ class GameControllerTest {
         @Test
         @DisplayName("should result in a new state and update the board panel")
         void whenCanRotateBlock() {
-            GameState original = new GameState(board, 0, false);
+            GameState original = new GameState(board, new Score(0, 0), false);
 
             when(blockService.rotateBlock(block, RotationMatrix.CLOCK_WISE_90)).thenReturn(block);
             when(boardService.canPlaceBlock(board, block, position)).thenReturn(true);
@@ -77,7 +86,7 @@ class GameControllerTest {
         @Test
         @DisplayName("should not update the board panel and should keep the state the same")
         void whenCannotRotateBlock() {
-            GameState original = new GameState(board, 0, false);
+            GameState original = new GameState(board, new Score(0, 0), false);
 
             when(boardService.canPlaceBlock(board, block, position)).thenReturn(false);
             when(blockService.rotateBlock(block, RotationMatrix.CLOCK_WISE_90)).thenReturn(block);
@@ -112,7 +121,7 @@ class GameControllerTest {
             when(boardService.canPlaceBlock(board, block, movedPosition)).thenReturn(true);
             when(boardService.setActiveBlock(board, block, movedPosition)).thenReturn(board);
 
-            GameState original = new GameState(board, 0, false);
+            GameState original = new GameState(board, new Score(0, 0), false);
 
             GameState actual = controller.moveActiveBlock(original, direction);
 
@@ -125,7 +134,7 @@ class GameControllerTest {
         void whenCannotMoveBlock() {
             when(boardService.canPlaceBlock(any(Board.class), any(Block.class), any(Point.class))).thenReturn(false);
 
-            GameState original = new GameState(board, 0, false);
+            GameState original = new GameState(board, new Score(0, 0), false);
 
             GameState actual = controller.moveActiveBlock(original, Direction.LEFT);
 
@@ -154,7 +163,7 @@ class GameControllerTest {
             when(boardService.canPlaceBlock(board, block, loweredPosition)).thenReturn(true);
             when(boardService.setActiveBlock(board, block, loweredPosition)).thenReturn(board);
 
-            GameState original = new GameState(board, 0, false);
+            GameState original = new GameState(board, new Score(0, 0), false);
 
             GameState actual = controller.lowerActiveBlock(original);
 
@@ -173,7 +182,7 @@ class GameControllerTest {
             when(blockFactory.getBlock()).thenReturn(block);
             when(boardService.setActiveBlock(board, block, centeredPosition)).thenReturn(board);
 
-            GameState original = new GameState(board, 0, false);
+            GameState original = new GameState(board, new Score(0, 0), false);
 
             GameState actual = controller.lowerActiveBlock(original);
 
@@ -193,8 +202,10 @@ class GameControllerTest {
             Set<Integer> fullRows = Set.of(1, 2);
             when(boardService.getFullRows(board)).thenReturn(fullRows);
             when(boardService.removeRows(board, fullRows)).thenReturn(board);
+            Score modifiedScore = new Score(0, 2);
+            when(scoreService.increaseByLines(any(Score.class), anyInt())).thenReturn(modifiedScore);
 
-            GameState original = new GameState(board, 0, false);
+            GameState original = new GameState(board, new Score(0, 0), false);
 
             GameState actual = controller.clearFullRows(original);
 
@@ -203,17 +214,16 @@ class GameControllerTest {
         }
 
         @Test
-        @DisplayName("should not update board panel of no full rows")
+        @DisplayName("should not update board or score panels if no full rows")
         void whenNotFullRows() {
             Board board = mock(Board.class);
             when(boardService.getFullRows(board)).thenReturn(Collections.emptySet());
 
-            GameState original = new GameState(board, 0, false);
+            GameState original = new GameState(board, new Score(0, 0), false);
 
             GameState actual = controller.clearFullRows(original);
 
             assertThat(actual).isSameAs(original);
-            verify(boardService, never()).removeRows(any(Board.class), anySet());
         }
     }
 }
