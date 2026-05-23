@@ -215,7 +215,7 @@ class GameControllerTest {
 
             when(boardService.canPlaceBlock(board, block, loweredPosition)).thenReturn(true);
             when(boardService.setActiveBlock(board, block, loweredPosition)).thenReturn(board);
-            when(scoreService.increaseTotal(any(Score.class), anyInt())).thenReturn(new Score(1, 0));
+            when(scoreService.increase(any(Score.class), anyInt())).thenReturn(new Score(1, 0));
 
             GameState actualState = controller.softDropActiveBlock(originalState);
 
@@ -231,10 +231,14 @@ class GameControllerTest {
             Point loweredPosition = originalPosition.moveDown(1);
 
             when(boardService.canPlaceBlock(board, block, loweredPosition)).thenReturn(false);
+            when(boardService.lockActiveBlock(any(Board.class))).thenReturn(board);
+            when(blockFactory.getBlock()).thenReturn(block);
+            when(boardService.setActiveBlock(any(Board.class), any(Block.class), any(Point.class))).thenReturn(board);
 
             GameState actualState = controller.softDropActiveBlock(originalState);
 
             assertThat(actualState).isEqualTo(originalState);
+            verify(boardService).lockActiveBlock(board);
         }
     }
 
