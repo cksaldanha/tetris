@@ -76,54 +76,28 @@ public class GameController {
     }
 
     public GameState lowerActiveBlock(GameState state) {
-        Board board = state.board();
-        Block block = board.getActiveBlock();
-        Point position = board.getActiveBlockPosition().moveDown(1);
-
-        log.debug("Lowering active block {}", block.getClass().getSimpleName());
-
-        if (boardService.canPlaceBlock(board, block, position)) {
-            board = boardService.setActiveBlock(board, block, position);
-        } else {
-            board = boardService.lockActiveBlock(board);
-            board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-        }
-
-        updateBoard(board);
-        return state.mutate().board(board).build();
+        return dropActiveBlock(state, 1, 0);
     }
 
     public GameState softDropActiveBlock(GameState state) {
-        Board board = state.board();
-        Block block = board.getActiveBlock();
-        Point position = board.getActiveBlockPosition().moveDown(1);
-        Score score = state.score();
-
-        if (boardService.canPlaceBlock(board, block, position)) {
-            board = boardService.setActiveBlock(board, block, position);
-            score = scoreService.increase(score, 1);
-            state = state.mutate().board(board).score(score).build();
-        } else {
-            board = boardService.lockActiveBlock(board);
-            board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = state.mutate().board(board).build();
-        }
-
-        updateBoard(board);
-        updateScore(score);
-        return state;
+        return dropActiveBlock(state, 1, 1);
     }
 
     public GameState hardDropActiveBlock(GameState state) {
+        int distance = boardService.getMaximumDistanceToBottom(state.board());
+
+        return dropActiveBlock(state, distance, 2);
+    }
+
+    private GameState dropActiveBlock(GameState state, int distance, int pointMultiplier) {
         Board board = state.board();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition();
         Score score = state.score();
 
-        int distance = boardService.getMaximumDistanceToBottom(board);
-        if (distance > 0) {
+        if (boardService.canPlaceBlock(board, block, position.moveDown(distance))) {
             board = boardService.setActiveBlock(board, block, position.moveDown(distance));
-            score = scoreService.increase(score, 2 * distance);
+            score = scoreService.increase(score, distance * pointMultiplier);
             state = state.mutate().board(board).score(score).build();
         } else {
             board = boardService.lockActiveBlock(board);

@@ -295,6 +295,7 @@ class GameControllerTest {
         @Test
         void whenHasDistance() {
             when(boardService.getMaximumDistanceToBottom(board)).thenReturn(5);
+            when(boardService.canPlaceBlock(board, block, position.moveDown(5))).thenReturn(true);
             when(boardService.setActiveBlock(board, block, position.moveDown(5))).thenReturn(board);
             when(scoreService.increase(any(Score.class), anyInt())).thenReturn(score);
 
