@@ -82,10 +82,25 @@ public class BoardPanel extends JPanel {
 
     private void paintTile(Graphics g, int x, int y, int tileWidth, int tileHeight, Color color) {
         Color prevColor = g.getColor();
+        Color highlight = color.brighter();
+        Color shadow = color.darker();
+        int bevelSize = 3;
+
+        // inner base rectangle
         g.setColor(color);
-        g.fillRect(x, y, tileWidth, tileHeight);
-        g.setColor(Color.BLACK);
-        g.drawRect(x, y, tileWidth, tileHeight);
+        g.fillRect(x + bevelSize, y + bevelSize, tileWidth - (bevelSize * 2), tileHeight - (bevelSize * 2));
+
+        // beveled edges
+        for (int i = 0; i < bevelSize; i++) {
+            g.setColor(highlight);
+            g.drawLine(x + i, y + i, x + tileWidth - 1 - i, y + i); // Top edge
+            g.drawLine(x + i, y + i, x + i, y + tileHeight - 1 - i); // Left edge
+
+            g.setColor(shadow);
+            g.drawLine(x + tileWidth - 1 - i, y + i, x + tileWidth - 1 - i, y + tileHeight - 1 - i); // Right edge
+            g.drawLine(x + i, y + tileWidth - 1 - i, x + tileWidth - 1 - i, y + tileHeight - 1 - i); // Bottom edge
+        }
+
         g.setColor(prevColor);
     }
 
