@@ -1,5 +1,6 @@
 package com.cks.tetris.event;
 
+import com.cks.tetris.model.Board;
 import com.cks.tetris.model.state.Score;
 import com.cks.tetris.model.state.GameState;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 class BoardEventTest {
 
@@ -56,6 +58,23 @@ class BoardEventTest {
             assertThat(actualState)
                     .isNotEqualTo(originalState)
                     .extracting("score").isEqualTo(new Score(1L, 0));
+        }
+
+        @Test
+        @DisplayName("should return the same state if gameOver is 'true'")
+        void whenGameOver() {
+            Board board = mock(Board.class);
+            Score score = mock(Score.class);
+            GameState originalState = new GameState(board, score, false, true);
+            UnaryOperator<GameState> originalOperator = state -> state.mutate().score(mock(Score.class)).build();
+
+            BoardEvent event = new BoardEvent(this, originalOperator);
+
+            UnaryOperator<GameState> actualOperator = event.getOperator();
+            GameState actualState = actualOperator.apply(originalState);
+
+            assertThat(actualState).isSameAs(originalState);
+            assertThat(actualOperator).isNotSameAs(originalOperator);
         }
     }
 }
