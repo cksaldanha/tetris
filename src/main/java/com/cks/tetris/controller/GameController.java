@@ -52,7 +52,7 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, rotatedBlock, position)) {
             board = boardService.setActiveBlock(board, rotatedBlock, position);
-            state = new GameState(board, state.score(), state.paused());
+            state = state.mutate().board(board).build();
             updateBoard(board);
         }
 
@@ -68,7 +68,7 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
-            state = new GameState(board, state.score(), state.paused());
+            state = state.mutate().board(board).build();
             updateBoard(board);
         }
 
@@ -84,15 +84,13 @@ public class GameController {
 
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
-            state = new GameState(board, state.score(), state.paused());
         } else {
             board = boardService.lockActiveBlock(board);
             board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = new GameState(board, state.score(), state.paused());
         }
 
         updateBoard(board);
-        return state;
+        return state.mutate().board(board).build();
     }
 
     public GameState softDropActiveBlock(GameState state) {
@@ -104,11 +102,11 @@ public class GameController {
         if (boardService.canPlaceBlock(board, block, position)) {
             board = boardService.setActiveBlock(board, block, position);
             score = scoreService.increase(score, 1);
-            state = new GameState(board, score, state.paused());
+            state = state.mutate().board(board).score(score).build();
         } else {
             board = boardService.lockActiveBlock(board);
             board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = new GameState(board, score, state.paused());
+            state = state.mutate().board(board).build();
         }
 
         updateBoard(board);
@@ -126,11 +124,11 @@ public class GameController {
         if (distance > 0) {
             board = boardService.setActiveBlock(board, block, position.moveDown(distance));
             score = scoreService.increase(score, 2 * distance);
-            state = new GameState(board, score, state.paused());
+            state = state.mutate().board(board).score(score).build();
         } else {
             board = boardService.lockActiveBlock(board);
             board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = new GameState(board, score, state.paused());
+            state = state.mutate().board(board).build();
         }
 
         updateBoard(board);
@@ -146,7 +144,7 @@ public class GameController {
         if (!fullRows.isEmpty()) {
             board = boardService.removeRows(board, fullRows);
             score = scoreService.increaseByLines(score, fullRows.size());
-            state = new GameState(board, score, state.paused());
+            state = state.mutate().board(board).score(score).build();
             updateBoard(board);
             updateScore(score);
         }
