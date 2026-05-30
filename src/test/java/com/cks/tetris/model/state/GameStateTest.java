@@ -26,7 +26,7 @@ class GameStateTest {
 
         @BeforeEach
         void setUp() {
-            original = new GameState(board, score, false);
+            original = new GameState(board, score, false, false);
         }
 
         @Test

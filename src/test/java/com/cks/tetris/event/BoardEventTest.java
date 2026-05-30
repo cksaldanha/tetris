@@ -30,8 +30,8 @@ class BoardEventTest {
         @Test
         @DisplayName("should return the same state if paused")
         void whenPaused() {
-            GameState originalState = new GameState(null, new Score(0, 0), true);
-            UnaryOperator<GameState> modifier = state -> new GameState(state.board(), state.score().addTotal(1), state.paused());
+            GameState originalState = new GameState(null, new Score(0, 0), true, false);
+            UnaryOperator<GameState> modifier = state -> new GameState(state.board(), state.score().addTotal(1), state.paused(), false);
 
             BoardEvent event = new BoardEvent(this, modifier);
 
@@ -45,8 +45,8 @@ class BoardEventTest {
         @Test
         @DisplayName("should modify the state if unpaused")
         void whenUnpaused() {
-            GameState originalState = new GameState(null, new Score(0, 0), false);
-            UnaryOperator<GameState> originalOperator = state -> new GameState(state.board(), state.score().addTotal(1), state.paused());
+            GameState originalState = new GameState(null, new Score(0, 0), false, false);
+            UnaryOperator<GameState> originalOperator = state -> new GameState(state.board(), state.score().addTotal(1), state.paused(), false);
 
             BoardEvent event = new BoardEvent(this, originalOperator);
 

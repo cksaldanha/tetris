@@ -101,8 +101,11 @@ public class GameController {
             state = state.mutate().board(board).score(score).build();
         } else {
             board = boardService.lockActiveBlock(board);
-            board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = state.mutate().board(board).build();
+            Block nextBlock = blockFactory.getBlock();
+            Point nextBlockPosition = Point.of(board.getColumnCount() / 2, 0);
+            boolean blockOut = !boardService.canPlaceBlock(board, nextBlock, nextBlockPosition);
+            board = boardService.setActiveBlock(board, nextBlock, nextBlockPosition);
+            state = state.mutate().board(board).gameOver(blockOut).build();
         }
 
         updateBoard(board);

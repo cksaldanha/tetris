@@ -15,7 +15,7 @@ class PauseEventTest {
         @Test
         @DisplayName("should create an UnaryOperator that flips the 'paused' field of game state")
         void whenCalled() {
-            GameState originalState = new GameState(null, new Score(0, 0), false);
+            GameState originalState = new GameState(null, new Score(0, 0), false, false);
             PauseEvent event = new PauseEvent(this);
 
             GameState modifiedState = event.getOperator().apply(originalState);

@@ -37,7 +37,7 @@ public class GameConfig {
         int cols = gameProperties.getColumnCount();
         Block startingBlock = blockFactory.getBlock();
         Board startingBoard = new Board(new Matrix<>(rows, cols), startingBlock, Point.of(cols / 2, 0));
-        GameState initialState = new GameState(startingBoard, new Score(0, 0), false);
+        GameState initialState = new GameState(startingBoard, new Score(0, 0), false, false);
         return new AtomicReference<>(initialState);
     }
 }
