@@ -13,6 +13,7 @@ import com.cks.tetris.service.BoardService;
 import com.cks.tetris.service.ScoreService;
 import com.cks.tetris.ui.BoardPanel;
 import com.cks.tetris.ui.ScorePanel;
+import com.cks.tetris.ui.TextPanel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import java.util.Set;
 public class GameController {
 
     private final BoardPanel boardPanel;
+    private final TextPanel textPanel;
     private final ScorePanel scorePanel;
     private final BoardService boardService;
     private final ScoreService scoreService;
@@ -32,8 +34,9 @@ public class GameController {
     private final BlockFactory blockFactory;
 
     @Autowired
-    public GameController(BoardPanel boardPanel, ScorePanel scorePanel, BoardService boardService, ScoreService scoreService, BlockService blockService, BlockFactory blockFactory) {
+    public GameController(BoardPanel boardPanel, TextPanel textPanel, ScorePanel scorePanel, BoardService boardService, ScoreService scoreService, BlockService blockService, BlockFactory blockFactory) {
         this.boardPanel = boardPanel;
+        this.textPanel = textPanel;
         this.scorePanel = scorePanel;
         this.boardService = boardService;
         this.scoreService = scoreService;
@@ -76,59 +79,36 @@ public class GameController {
     }
 
     public GameState lowerActiveBlock(GameState state) {
-        Board board = state.board();
-        Block block = board.getActiveBlock();
-        Point position = board.getActiveBlockPosition().moveDown(1);
-
-        log.debug("Lowering active block {}", block.getClass().getSimpleName());
-
-        if (boardService.canPlaceBlock(board, block, position)) {
-            board = boardService.setActiveBlock(board, block, position);
-        } else {
-            board = boardService.lockActiveBlock(board);
-            board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-        }
-
-        updateBoard(board);
-        return state.mutate().board(board).build();
+        return dropActiveBlock(state, 1, 0);
     }
 
     public GameState softDropActiveBlock(GameState state) {
-        Board board = state.board();
-        Block block = board.getActiveBlock();
-        Point position = board.getActiveBlockPosition().moveDown(1);
-        Score score = state.score();
-
-        if (boardService.canPlaceBlock(board, block, position)) {
-            board = boardService.setActiveBlock(board, block, position);
-            score = scoreService.increase(score, 1);
-            state = state.mutate().board(board).score(score).build();
-        } else {
-            board = boardService.lockActiveBlock(board);
-            board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = state.mutate().board(board).build();
-        }
-
-        updateBoard(board);
-        updateScore(score);
-        return state;
+        return dropActiveBlock(state, 1, 1);
     }
 
     public GameState hardDropActiveBlock(GameState state) {
+        int distance = boardService.getMaximumDistanceToBottom(state.board());
+
+        return dropActiveBlock(state, distance, 2);
+    }
+
+    private GameState dropActiveBlock(GameState state, int distance, int pointMultiplier) {
         Board board = state.board();
         Block block = board.getActiveBlock();
         Point position = board.getActiveBlockPosition();
         Score score = state.score();
 
-        int distance = boardService.getMaximumDistanceToBottom(board);
-        if (distance > 0) {
+        if (boardService.canPlaceBlock(board, block, position.moveDown(distance))) {
             board = boardService.setActiveBlock(board, block, position.moveDown(distance));
-            score = scoreService.increase(score, 2 * distance);
+            score = scoreService.increase(score, distance * pointMultiplier);
             state = state.mutate().board(board).score(score).build();
         } else {
             board = boardService.lockActiveBlock(board);
-            board = boardService.setActiveBlock(board, blockFactory.getBlock(), Point.of(board.getColumnCount() / 2, 0));
-            state = state.mutate().board(board).build();
+            Block nextBlock = blockFactory.getBlock();
+            Point nextBlockPosition = Point.of(board.getColumnCount() / 2, 0);
+            boolean blockOut = !boardService.canPlaceBlock(board, nextBlock, nextBlockPosition);
+            board = boardService.setActiveBlock(board, nextBlock, nextBlockPosition);
+            state = state.mutate().board(board).gameOver(blockOut).build();
         }
 
         updateBoard(board);
@@ -150,6 +130,16 @@ public class GameController {
         }
 
         return state;
+    }
+
+    public void updateText(GameState state) {
+        if (state.gameOver()) {
+            EventQueue.invokeLater(() -> textPanel.setText("Game Over"));
+        } else if (state.paused()) {
+            EventQueue.invokeLater(() -> textPanel.setText("Paused"));
+        } else {
+            EventQueue.invokeLater(() -> textPanel.setText(""));
+        }
     }
 
     private void updateBoard(Board board) {

@@ -2,10 +2,10 @@ package com.cks.tetris.model.state;
 
 import com.cks.tetris.model.Board;
 
-public record GameState(Board board, Score score, boolean paused) {
+public record GameState(Board board, Score score, boolean paused, boolean gameOver) {
 
     public GameState(Builder builder) {
-        this(builder.board, builder.score, builder.paused);
+        this(builder.board, builder.score, builder.paused, builder.gameOver);
     }
 
     public Builder mutate() {
@@ -20,6 +20,7 @@ public record GameState(Board board, Score score, boolean paused) {
         private Board board;
         private Score score;
         private boolean paused;
+        private boolean gameOver;
 
         protected Builder() {
         }
@@ -42,6 +43,11 @@ public record GameState(Board board, Score score, boolean paused) {
 
         public Builder paused(boolean paused) {
             this.paused = paused;
+            return self();
+        }
+
+        public Builder gameOver(boolean gameOver) {
+            this.gameOver = gameOver;
             return self();
         }
 

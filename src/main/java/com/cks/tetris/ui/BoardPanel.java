@@ -25,9 +25,6 @@ public class BoardPanel extends JPanel {
     public BoardPanel(AtomicReference<GameState> gameState, Map<com.cks.tetris.model.Color, Color> colorMap) {
         super(null);
         this.colorMap = colorMap;
-        Dimension size = new Dimension(300, 600);
-        setPreferredSize(size);
-        setMinimumSize(size);
         setBorder(BorderFactory.createLineBorder(getBackground().darker(), 2));
         this.board = gameState.get().board();
     }
@@ -40,16 +37,6 @@ public class BoardPanel extends JPanel {
 
     public Board getBoard() {
         return board;
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(300, 600);
-    }
-
-    @Override
-    public Dimension getMinimumSize() {
-        return new Dimension(300, 600);
     }
 
     @Override

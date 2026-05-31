@@ -1,5 +1,6 @@
 package com.cks.tetris.event;
 
+import com.cks.tetris.model.Board;
 import com.cks.tetris.model.state.Score;
 import com.cks.tetris.model.state.GameState;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 class BoardEventTest {
 
@@ -30,8 +32,8 @@ class BoardEventTest {
         @Test
         @DisplayName("should return the same state if paused")
         void whenPaused() {
-            GameState originalState = new GameState(null, new Score(0, 0), true);
-            UnaryOperator<GameState> modifier = state -> new GameState(state.board(), state.score().addTotal(1), state.paused());
+            GameState originalState = new GameState(null, new Score(0, 0), true, false);
+            UnaryOperator<GameState> modifier = state -> new GameState(state.board(), state.score().addTotal(1), state.paused(), false);
 
             BoardEvent event = new BoardEvent(this, modifier);
 
@@ -45,8 +47,8 @@ class BoardEventTest {
         @Test
         @DisplayName("should modify the state if unpaused")
         void whenUnpaused() {
-            GameState originalState = new GameState(null, new Score(0, 0), false);
-            UnaryOperator<GameState> originalOperator = state -> new GameState(state.board(), state.score().addTotal(1), state.paused());
+            GameState originalState = new GameState(null, new Score(0, 0), false, false);
+            UnaryOperator<GameState> originalOperator = state -> new GameState(state.board(), state.score().addTotal(1), state.paused(), false);
 
             BoardEvent event = new BoardEvent(this, originalOperator);
 
@@ -56,6 +58,23 @@ class BoardEventTest {
             assertThat(actualState)
                     .isNotEqualTo(originalState)
                     .extracting("score").isEqualTo(new Score(1L, 0));
+        }
+
+        @Test
+        @DisplayName("should return the same state if gameOver is 'true'")
+        void whenGameOver() {
+            Board board = mock(Board.class);
+            Score score = mock(Score.class);
+            GameState originalState = new GameState(board, score, false, true);
+            UnaryOperator<GameState> originalOperator = state -> state.mutate().score(mock(Score.class)).build();
+
+            BoardEvent event = new BoardEvent(this, originalOperator);
+
+            UnaryOperator<GameState> actualOperator = event.getOperator();
+            GameState actualState = actualOperator.apply(originalState);
+
+            assertThat(actualState).isSameAs(originalState);
+            assertThat(actualOperator).isNotSameAs(originalOperator);
         }
     }
 }

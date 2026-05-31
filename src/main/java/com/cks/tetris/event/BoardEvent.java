@@ -7,6 +7,6 @@ import java.util.function.UnaryOperator;
 public class BoardEvent extends GameEvent {
 
     public BoardEvent(Object source, UnaryOperator<GameState> operator) {
-        super(source, state -> state.paused() ? state : operator.apply(state));
+        super(source, state -> state.paused() || state.gameOver() ? state : operator.apply(state));
     }
 }
