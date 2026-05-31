@@ -22,5 +22,18 @@ class PauseEventTest {
 
             assertThat(modifiedState).extracting("paused").isEqualTo(true);
         }
+
+        @Test
+        @DisplayName("should return the same state if 'gameOver=true'")
+        void whenGameOver() {
+            GameState originalState = GameState.builder().gameOver(true).build();
+            PauseEvent event = new PauseEvent(this);
+
+            GameState modifiedState = event.getOperator().apply(originalState);
+
+            assertThat(modifiedState)
+                    .isEqualTo(originalState)
+                    .isSameAs(originalState);
+        }
     }
 }

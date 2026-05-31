@@ -21,6 +21,7 @@ public class MainDialog extends JFrame {
                       CommandDialog commandDialog,
                       InformationPanel informationPanel,
                       BoardPanel boardPanel,
+                      TextPanel textPanel,
                       DirectionKeyListener directionKeyListener,
                       RotationKeyListener rotationKeyListener,
                       ControlKeyListener controlKeyListener) {
@@ -37,10 +38,18 @@ public class MainDialog extends JFrame {
         addKeyListener(controlKeyListener);
 
         add(informationPanel, BorderLayout.NORTH);
-        add(boardPanel, BorderLayout.CENTER);
+        JLayeredPane layeredPane = new JLayeredPane();
+        Dimension size = new Dimension(300, 600);
+        layeredPane.setPreferredSize(size);
 
-        pack();
-        setResizable(false);
+        Rectangle bounds = new Rectangle(size);
+        boardPanel.setBounds(bounds);
+        textPanel.setBounds(bounds);
+
+        layeredPane.add(boardPanel, Integer.valueOf(1));
+        layeredPane.add(textPanel, Integer.valueOf(2));
+
+        add(layeredPane, BorderLayout.CENTER);
     }
 
     public JMenuBar mainMenuBar() {

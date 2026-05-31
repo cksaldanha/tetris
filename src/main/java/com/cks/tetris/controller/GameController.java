@@ -13,6 +13,7 @@ import com.cks.tetris.service.BoardService;
 import com.cks.tetris.service.ScoreService;
 import com.cks.tetris.ui.BoardPanel;
 import com.cks.tetris.ui.ScorePanel;
+import com.cks.tetris.ui.TextPanel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import java.util.Set;
 public class GameController {
 
     private final BoardPanel boardPanel;
+    private final TextPanel textPanel;
     private final ScorePanel scorePanel;
     private final BoardService boardService;
     private final ScoreService scoreService;
@@ -32,8 +34,9 @@ public class GameController {
     private final BlockFactory blockFactory;
 
     @Autowired
-    public GameController(BoardPanel boardPanel, ScorePanel scorePanel, BoardService boardService, ScoreService scoreService, BlockService blockService, BlockFactory blockFactory) {
+    public GameController(BoardPanel boardPanel, TextPanel textPanel, ScorePanel scorePanel, BoardService boardService, ScoreService scoreService, BlockService blockService, BlockFactory blockFactory) {
         this.boardPanel = boardPanel;
+        this.textPanel = textPanel;
         this.scorePanel = scorePanel;
         this.boardService = boardService;
         this.scoreService = scoreService;
@@ -127,6 +130,16 @@ public class GameController {
         }
 
         return state;
+    }
+
+    public void updateText(GameState state) {
+        if (state.gameOver()) {
+            EventQueue.invokeLater(() -> textPanel.setText("Game Over"));
+        } else if (state.paused()) {
+            EventQueue.invokeLater(() -> textPanel.setText("Paused"));
+        } else {
+            EventQueue.invokeLater(() -> textPanel.setText(""));
+        }
     }
 
     private void updateBoard(Board board) {

@@ -21,6 +21,8 @@ public class Application {
 
         EventQueue.invokeLater(() -> {
             JFrame app = context.getBean("mainDialog", JFrame.class);
+            app.setResizable(false);
+            app.pack();
             app.setVisible(true);
         });
     }
