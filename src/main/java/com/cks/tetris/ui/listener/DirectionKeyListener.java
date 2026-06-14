@@ -3,6 +3,7 @@ package com.cks.tetris.ui.listener;
 import com.cks.tetris.controller.GameController;
 import com.cks.tetris.event.BoardEvent;
 import com.cks.tetris.event.GameEventPublisher;
+import com.cks.tetris.math.RotationMatrix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,7 @@ public class DirectionKeyListener implements KeyListener {
             case KeyEvent.VK_DOWN:
                 gameEventPublisher.publishGameEvent(new BoardEvent(this, gameController::softDropActiveBlock));
                 break;
+
         }
     }
 
