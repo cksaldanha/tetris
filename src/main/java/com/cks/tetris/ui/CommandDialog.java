@@ -12,24 +12,33 @@ public class CommandDialog extends JPanel {
     private final Font font;
 
     public CommandDialog() {
-        super(new GridLayout(6, 2, 5, 5));
+        super(new GridLayout(10, 2, 5, 5));
 
         font = new Font("Courier New", Font.PLAIN, 12);
 
-        add(createLabel("'Cursor Down'"));
-        add(createLabel("Move down"));
-        add(createLabel("'Cursor Left'"));
+        add(createLabel("↓"));
+        add(createLabel("Soft drop"));
+
+        add(createLabel("←"));
         add(createLabel("Move left"));
-        add(createLabel("'Cursor Right'"));
+
+        add(createLabel("→"));
         add(createLabel("Move right"));
-        add(createLabel("'R'"));
+
+        add(createLabel("↑, 'X'"));
         add(createLabel("Rotate clockwise"));
-        add(createLabel("'F'"));
+
+        add(createLabel("'Z'"));
         add(createLabel("Rotate counter-clockwise"));
-        add(createLabel("'Q'"));
-        add(createLabel("Rotate counter-clockwise"));
-        add(createLabel("'Space Bar'"));
+
+        add(createLabel("'C', 'Shift'"));
+        add(createLabel("Hold block"));
+
+        add(createLabel("'Escape'"));
         add(createLabel("Pause / Resume"));
+
+        add(createLabel("'Space Bar'"));
+        add(createLabel("Hard drop"));
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
