@@ -104,16 +104,23 @@ public class GameController {
             state = state.mutate().board(board).score(score).build();
         } else {
             board = boardService.lockActiveBlock(board);
-            Block nextBlock = blockFactory.getBlock();
-            Point nextBlockPosition = Point.of(board.getColumnCount() / 2, 0);
-            boolean blockOut = !boardService.canPlaceBlock(board, nextBlock, nextBlockPosition);
-            board = boardService.setActiveBlock(board, nextBlock, nextBlockPosition);
-            state = state.mutate().board(board).gameOver(blockOut).build();
+            state = state.mutate().board(board).build();
+            state = addNewBlock(state);
+            board = state.board();
         }
 
         updateBoard(board);
         updateScore(score);
         return state;
+    }
+
+    private GameState addNewBlock(GameState state) {
+        Board board = state.board();
+        Block nextBlock = blockFactory.getBlock();
+        Point nextBlockPosition = Point.of(board.getColumnCount() / 2, 0);
+        boolean blockOut = !boardService.canPlaceBlock(board, nextBlock, nextBlockPosition);
+        board = boardService.setActiveBlock(board, nextBlock, nextBlockPosition);
+        return state.mutate().board(board).gameOver(blockOut).build();
     }
 
     public GameState clearFullRows(GameState state) {
