@@ -37,7 +37,7 @@ class BoardServiceTest {
     void setUp() {
         sampleBlock = new IBlock();
 
-        samplePosition = Point.of(0, 5);
+        samplePosition = Point.of(1, 5);
 
         sampleBoard = new Board(new Matrix<>(20, 10), sampleBlock, samplePosition);
     }
