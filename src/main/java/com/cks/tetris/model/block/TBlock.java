@@ -13,7 +13,7 @@ public class TBlock extends Block {
             Point.of(-1, +0),
             Point.of(+0, +0),
             Point.of(+1, +0),
-            Point.of(+0, -1)
+            Point.of(+0, +1)
     );
 
     public TBlock() {
